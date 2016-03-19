@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.2.1'
 
 gem 'rails', '4.2.1'
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.20'
 gem 'puma'
 
 #--------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ gem 'roboto'
 #--------------------------------------------------------------------------------
 # gem 'kaminari'
 # gem 'nprogress-rails'
-gem 'simple_form'
+# gem 'simple_form'
 # gem "select2-rails", '~> 3.0'
 # gem "nested_form"
 
