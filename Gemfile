@@ -1,47 +1,85 @@
 source 'https://rubygems.org'
 
+ruby '2.2.1'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5'
-# Use mysql as the database for Active Record
-gem 'mysql2', '>= 0.3.13', '< 0.5'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
+gem 'rails', '4.2.1'
+gem 'mysql2'
+gem 'puma'
+
+#--------------------------------------------------------------------------------
+# Basis
+#--------------------------------------------------------------------------------
+gem 'sass-rails', '~> 4.0.0'
+gem 'sprockets'
 gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
-# Use jquery as the JavaScript library
 gem 'jquery-rails'
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'haml-rails'
+gem 'bootstrap-sass', '>= 3.0.0.0'
+gem 'bootstrap-datepicker-rails'
+gem 'font-awesome-rails'
+gem 'compass-rails'
+gem 'zurui-sass-rails'
+gem 'roboto'
+# gem 'react-rails', '~> 1.0'
+# gem 'jquery-turbolinks'
+# gem 'lodash-rails'
+# gem 'momentjs-rails'
+# gem 'business_time'
+# gem 'holiday_jp'
+# gem 'therubyracer'
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+#--------------------------------------------------------------------------------
+# View Helpers
+#--------------------------------------------------------------------------------
+# gem 'kaminari'
+# gem 'nprogress-rails'
+gem 'simple_form'
+# gem "select2-rails", '~> 3.0'
+# gem "nested_form"
 
-# Use Unicorn as the app server
-# gem 'unicorn'
+#--------------------------------------------------------------------------------
+# Active Record
+#--------------------------------------------------------------------------------
+# gem 'devise'
+# gem 'devise-bootstrap-views'
+# gem 'devise-i18n'
+# gem 'devise-i18n-views'
+# gem 'default_value_for', git: 'git://github.com/tsmango/default_value_for.git'
+# gem 'squeel'
+# gem 'acts_as_list'
+# gem 'enumerize'
+# gem 'active_attr'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+#--------------------------------------------------------------------------------
+# Operation
+#--------------------------------------------------------------------------------
+gem 'newrelic_rpm'
+gem 'bugsnag'
 
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+group :production, :staging do
+  gem 'rails_12factor'
 end
 
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'heroku_san', git: 'git://github.com/jphenow/heroku_san', branch: 'bug/wrong-ruby-version-loaded'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'erb2haml'
+  gem 'quiet_assets'
+  gem 'letter_opener'
+  gem 'i18n_generators'
+  gem 'hirb'
+end
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+group :development, :test do
+  gem 'byebug'
+  gem 'web-console', '~> 2.0'
   gem 'spring'
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+  gem 'spring-commands-rspec'
 end
 
