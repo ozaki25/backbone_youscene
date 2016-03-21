@@ -205,9 +205,6 @@ GEM
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
     sexp_processor (4.7.0)
-    simple_form (3.2.1)
-      actionpack (> 4, < 5.1)
-      activemodel (> 4, < 5.1)
     spring (1.6.4)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -269,7 +266,6 @@ DEPENDENCIES
   roboto
   rspec-rails
   sass-rails (~> 4.0.0)
-  simple_form
   spring
   spring-commands-rspec
   sprockets
