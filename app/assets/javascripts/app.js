@@ -4,6 +4,21 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 
 $(function(){
+    var Router = Backbone.Router.extend({
+        routes : {
+            ''    : 'index',
+            'new' : 'newBlog'
+        },
+        index : function index() {
+            console.log('index');
+            var Index = new IndexView;
+        },
+        newBlog : function newBlog() {
+            console.log('newBlog');
+            var NewBlog = new NewBlogView;
+        }
+    });
+
     var Blog = Backbone.Model.extend({
         defaults: function() {
             return {
@@ -15,6 +30,7 @@ $(function(){
             };
         }
     });
+    var router = new Router();
 
     var BlogList = Backbone.Collection.extend({
         model: Blog,
@@ -40,10 +56,6 @@ $(function(){
             '</div>'
         ),
         events: {
-            "dblclick .view"  : "edit",
-            "click a.destroy" : "clear",
-            "keypress .edit"  : "updateOnEnter",
-            "blur .edit"      : "close"
         },
         initialize: function() {
             console.log("blogs initialize");
@@ -55,50 +67,24 @@ $(function(){
             this.$el.html(this.template(this.model.toJSON()));
             this.input = this.$('.edit');
             return this;
-        },
-        edit: function() {
-            console.log("edit");
-            this.$el.addClass("editing");
-            this.input.focus();
-        },
-        close: function() {
-            console.log("close");
-            var value = this.input.val();
-            if (!value) {
-                this.clear();
-            } else {
-                this.model.save({title: value, content: value});
-                this.$el.removeClass("editing");
-            }
-        },
-        updateOnEnter: function(e) {
-            console.log("updateOnEnter");
-            if (e.keyCode == 13) this.close();
-        },
-        clear: function() {
-            console.log("clear");
-            this.model.destroy();
         }
     });
 
-    var AppView = Backbone.View.extend({
+    var IndexView = Backbone.View.extend({
         el: $("#main"),
         template: _.template(
-            ' <div id="blog_list"></div>'
+            '<div id="blog_list"></div>'
         ),
         events: {
-            "keypress #new-todo":  "createOnEnter"
         },
         initialize: function() {
-            console.log("app initialize");
+            console.log("index initialize");
             this.listenTo(Blogs, 'add', this.addOne);
-            this.listenTo(Blogs, 'reset', this.addAll);
-            //this.listenTo(Blogs, 'all', this.render);
             this.render();
             Blogs.fetch();
         },
         render: function() {
-            console.log("app render");
+            console.log("index render");
             this.$el.html(this.template());
             return this;
         },
@@ -106,20 +92,45 @@ $(function(){
             console.log("addOne");
             var view = new BlogView({model: blog});
             this.$("#blog_list").append(view.render().el);
-        },
-        addAll: function() {
-            console.log("addAll");
-            Blogs.each(this.addOne, this);
-        },
-        createOnEnter: function(e) {
-            console.log("createOnEnter");
-            if (e.keyCode != 13) return;
-            if (!this.input.val()) return;
-            Blogs.create({title: this.input.val(), content: this.input.val()});
-            this.input.val('');
         }
     });
-    var App = new AppView;
+
+    var NewBlogView = Backbone.View.extend({
+        el: $("#main"),
+        template: _.template(
+            '<div class="row new-blog">' +
+                '<div class="col-md-10 col-md-offset-1">' +
+                    '<div class="form-group">' +
+                        '<label>タイトル</label>' +
+                        '<input type="text" id="title" class="form-control">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                        '<label>投稿者</label>' +
+                        '<input type="text" id="author" class="form-control">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                        '<label>内容</label>' +
+                        '<textarea id="content" class="form-control" rows="10"></textarea>' +
+                    '</div>' +
+                    '<button class="btn btn-youscene">投稿</button>' +
+                '</div>' +
+            '</div>'
+        ),
+        events: {
+        },
+        initialize: function() {
+            console.log("new blog initialize");
+            this.listenTo(Blogs, 'add', this.addOne);
+            this.render();
+            Blogs.fetch();
+        },
+        render: function() {
+            console.log("new blog render");
+            this.$el.html(this.template());
+            return this;
+        }
+    });
+    Backbone.history.start();
 });
 
 },{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],"backbone":[function(require,module,exports){

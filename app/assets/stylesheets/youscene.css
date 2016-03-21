@@ -12,17 +12,17 @@ a:focus {
   color: #339933;
 }
 
-.btn-youScene {
+.btn-youscene {
   color: #ffffff;
   background-color: #91cf3b;
   border-color: #91cf3b;
 }
 
-.btn-youScene:hover,
-.btn-youScene:focus,
-.btn-youScene:active,
-.btn-youScene.active,
-.open .dropdown-toggle.btn-youScene {
+.btn-youscene:hover,
+.btn-youscene:focus,
+.btn-youscene:active,
+.btn-youscene.active,
+.open .dropdown-toggle.btn-youscene {
   color: #ffffff;
   background-color: #66cc00;
   border-color: #66cc00;
@@ -63,37 +63,15 @@ a:focus {
 
 .index-blog {
   border-bottom:solid 1px;
-  margin-top:5px;
-  margin-bottom:5px;
+  margin: 5px 0;
 }
 
 .index-title {
   font-size:150%;
 }
 
-.index-blog-info {
-  margin-right:0px;
-  margin-left:0px;
-}
-
-.form-group {
-  margin-right:25px;
-  margin-left:25px;
-  margin-bottom:25px;
-}
-
-.label-title,
-.label-article {
-  margin-top:10px;
-  margin-bottom:-35px;
-}
-
-.blogs-count {
-  float:right;
-}
-
-.btn-action {
-  text-align:center;
+.new-blog {
+  margin: 10px;
 }
 
 .show-title {
