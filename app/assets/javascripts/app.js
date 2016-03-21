@@ -8,7 +8,8 @@ $(function(){
         routes : {
             ''      : 'index',
             'index' : 'index',
-            'new'   : 'newBlog'
+            'new'   : 'newBlog',
+            ':id'   : 'show'
         },
         index : function index() {
             console.log('index');
@@ -17,6 +18,11 @@ $(function(){
         newBlog : function newBlog() {
             console.log('newBlog');
             NewBlog.render();
+        },
+        show : function show(id) {
+            console.log('show');
+            var blog = Blogs.get(id);
+            Show.render(blog);
         }
     });
 
@@ -44,7 +50,7 @@ $(function(){
         template: _.template(
             '<div class="index-blog row">' +
                 '<div class="index-title col-md-8">' +
-                    '<a href="#">' +
+                    '<a href="#<%- id %>">' +
                         '<%- title %>' +
                     '</a>' +
                 '</div>' +
@@ -127,7 +133,6 @@ $(function(){
         },
         initialize: function() {
             console.log("new blog initialize");
-            this.listenTo(Blogs, 'add', this.addOne);
         },
         render: function() {
             console.log("new blog render");
@@ -145,6 +150,35 @@ $(function(){
         }
     });
     var NewBlog = new NewBlogView;
+
+    var ShowView = Backbone.View.extend({
+        el: $("#main"),
+        template: _.template(
+            '<div class="show-blog">' +
+                '<div class="show-title"><%- title %></div>' +
+                '<ul class="show-blog-info list-inline">' +
+                    '<li><%- author %></li>' +
+                    '<li><%- updated_at %></li>' +
+                '</ul>' +
+                '<pre class="show-article"><%- content %></pre>' +
+                '<div class="form-inline">' +
+                    '<button id="edit_blog" class="btn btn-sm btn-youscene form-control">編集</button>' +
+                    '<button id="delete_blog" class="btn btn-sm btn-default form-control">削除</button>' +
+                '</div>' +
+            '</div>'
+        ),
+        events: {
+        },
+        initialize: function() {
+            console.log("show initialize");
+        },
+        render: function(blog) {
+            console.log("show render");
+            this.$el.html(this.template(blog.toJSON()));
+            return this;
+        }
+    });
+    var Show = new ShowView;
 
     Backbone.history.start();
 });

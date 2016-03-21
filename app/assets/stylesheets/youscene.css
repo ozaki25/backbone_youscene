@@ -81,13 +81,8 @@ a:focus {
   margin-top:5px;
 }
 
-.show-tag {
-  text-align:left;
-}
-
-.show-date {
-  text-align:right;
-  float:right;
+.show-blog-info {
+   margin-bottom: 0;
 }
 
 .show-article {
@@ -102,32 +97,6 @@ a:focus {
   margin-top:10px;
 }
 
-.operate-blog-btn {
-  float:left;
-}
-
 .feedback-count {
   text-align:right;
-}
-
-.delete-blog {
-  margin-left:5px;
-  display:inline;
-}
-
-.latest-blog {
-  margin-left:5px;
-}
-
-.latest-blogs {
-  margin-bottom:10px;
-}
-
-.index-link {
-  text-align:right;
-  margin-right:10px;
-}
-
-.error {
-  color:red;
 }
