@@ -14,26 +14,32 @@ class BlogsController < ApplicationController
   # POST /blogs.json
   def create
     @blog = Blog.new(blog_params)
-    if @blog.save
-      format.json { render :show, status: :created, location: @blog }
-    else
-      format.json { render json: @blog.errors, status: :unprocessable_entity }
+    respond_to do |format|
+      if @blog.save
+        format.json { render :show, status: :created, location: @blog }
+      else
+        format.json { render json: @blog.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   # PATCH/PUT /blogs/1.json
   def update
-    if @blog.update(blog_params)
-      format.json { render :show, status: :ok, location: @blog }
-    else
-      format.json { render json: @blog.errors, status: :unprocessable_entity }
+    respond_to do |format|
+      if @blog.update(blog_params)
+        format.json { render :show, status: :ok, location: @blog }
+      else
+        format.json { render json: @blog.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   # DELETE /blogs/1.json
   def destroy
     @blog.destroy
-    format.json { head :no_content }
+    respond_to do |format|
+      format.json { head :no_content }
+    end
   end
 
   private

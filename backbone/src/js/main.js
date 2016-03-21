@@ -5,16 +5,17 @@ var Backbone = require('backbone');
 $(function(){
     var Router = Backbone.Router.extend({
         routes : {
-            ''    : 'index',
-            'new' : 'newBlog'
+            ''      : 'index',
+            'index' : 'index',
+            'new'   : 'newBlog'
         },
         index : function index() {
             console.log('index');
-            var Index = new IndexView;
+            Index.render();
         },
         newBlog : function newBlog() {
             console.log('newBlog');
-            var NewBlog = new NewBlogView;
+            NewBlog.render();
         }
     });
 
@@ -79,11 +80,11 @@ $(function(){
         initialize: function() {
             console.log("index initialize");
             this.listenTo(Blogs, 'add', this.addOne);
-            this.render();
-            Blogs.fetch();
+            this.listenTo(Blogs, 'reset', this.addAll);
         },
         render: function() {
             console.log("index render");
+            Blogs.fetch({reset: true});
             this.$el.html(this.template());
             return this;
         },
@@ -91,8 +92,13 @@ $(function(){
             console.log("addOne");
             var view = new BlogView({model: blog});
             this.$("#blog_list").append(view.render().el);
+        },
+        addAll: function() {
+            console.log("addAll");
+            Blogs.each(this.addOne, this);
         }
     });
+    var Index = new IndexView;
 
     var NewBlogView = Backbone.View.extend({
         el: $("#main"),
@@ -111,23 +117,33 @@ $(function(){
                         '<label>内容</label>' +
                         '<textarea id="content" class="form-control" rows="10"></textarea>' +
                     '</div>' +
-                    '<button class="btn btn-youscene">投稿</button>' +
+                    '<button id="create_blog" class="btn btn-youscene">投稿</button>' +
                 '</div>' +
             '</div>'
         ),
         events: {
+            "click #create_blog": "create"
         },
         initialize: function() {
             console.log("new blog initialize");
             this.listenTo(Blogs, 'add', this.addOne);
-            this.render();
-            Blogs.fetch();
         },
         render: function() {
             console.log("new blog render");
             this.$el.html(this.template());
             return this;
+        },
+        create: function() {
+            console.log("create");
+            Blogs.create({
+                title: this.$("input#title").val(),
+                author: this.$("input#author").val(),
+                content: this.$("input#content").val()
+            });
+            router.navigate("index", {trigger:true});
         }
     });
+    var NewBlog = new NewBlogView;
+
     Backbone.history.start();
 });
