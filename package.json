@@ -1,0 +1,18 @@
+{
+  "name": "backbone_youscene",
+  "version": "1.0.0",
+  "description": "This is your new Play 2.1 application =====================================",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jquery": "^2.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,155 @@
+body {
+  margin-top: 50px;
+  background-color:#c3da9f;
+}
+
+a {
+  color: #336633;
+}
+
+a:hover,
+a:focus {
+  color: #339933;
+}
+
+.btn-youScene {
+  color: #ffffff;
+  background-color: #91cf3b;
+  border-color: #91cf3b;
+}
+
+.btn-youScene:hover,
+.btn-youScene:focus,
+.btn-youScene:active,
+.btn-youScene.active,
+.open .dropdown-toggle.btn-youScene {
+  color: #ffffff;
+  background-color: #66cc00;
+  border-color: #66cc00;
+}
+
+.navbar-youscene {
+  background-color: #222222;
+  border-color: #080808;
+}
+
+.navbar-youscene .navbar-brand {
+  color: #ffffff;
+}
+
+.navbar-youscene .navbar-brand:hover,
+.navbar-youscene .navbar-brand:focus {
+  color: #006633;
+  background-color: transparent;
+}
+
+.navbar-youscene .navbar-text {
+  color: #ffffff;
+}
+
+.navbar-youscene .navbar-nav > li > a {
+  color: #ffffff;
+}
+
+.navbar-youscene .navbar-nav > li > a:hover,
+.navbar-youscene .navbar-nav > li > a:focus {
+  color: #006633;
+  background-color: transparent;
+}
+
+.container#main {
+  background-color:#fffff0;
+}
+
+.index-blog {
+  border-bottom:solid 1px;
+  margin-top:5px;
+  margin-bottom:5px;
+}
+
+.index-title {
+  font-size:150%;
+}
+
+.index-blog-info {
+  margin-right:0px;
+  margin-left:0px;
+}
+
+.form-group {
+  margin-right:25px;
+  margin-left:25px;
+  margin-bottom:25px;
+}
+
+.label-title,
+.label-article {
+  margin-top:10px;
+  margin-bottom:-35px;
+}
+
+.blogs-count {
+  float:right;
+}
+
+.btn-action {
+  text-align:center;
+}
+
+.show-title {
+  font-size:200%;
+  color:#006633;
+  font-weight: bold;
+  margin-top:5px;
+}
+
+.show-tag {
+  text-align:left;
+}
+
+.show-date {
+  text-align:right;
+  float:right;
+}
+
+.show-article {
+  background-color: #fffff0;
+  border: none;
+  border-radius: 0px;
+  border-top:solid 1px;
+  border-bottom:solid 1px;
+}
+
+.show-author {
+  margin-top:10px;
+}
+
+.operate-blog-btn {
+  float:left;
+}
+
+.feedback-count {
+  text-align:right;
+}
+
+.delete-blog {
+  margin-left:5px;
+  display:inline;
+}
+
+.latest-blog {
+  margin-left:5px;
+}
+
+.latest-blogs {
+  margin-bottom:10px;
+}
+
+.index-link {
+  text-align:right;
+  margin-right:10px;
+}
+
+.error {
+  color:red;
+}

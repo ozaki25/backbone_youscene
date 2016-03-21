@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>BackboneSample</title>
+        <link rel="stylesheet"  media="screen" href="./css/todos.css">
+        <script src="./js/app.js" type="text/javascript"></script>
+    </head>
+    <body>
+      <div id="todoapp">
+        <header>
+          <h1>Blog</h1>
+          <input id="new-todo" type="text" placeholder="What needs to be done?">
+        </header>
+        <section id="main">
+          <input id="toggle-all" type="checkbox">
+          <label for="toggle-all">Mark all as complete</label>
+          <ul id="todo-list"></ul>
+        </section>
+        <footer>
+          <a id="clear-completed">Clear completed</a>
+          <div id="todo-count"></div>
+        </footer>
+      </div>
+      <div id="instructions">Double-click to edit a todo.</div>
+
+      <script type="text/template" id="item-template">
+        <div class="view">
+          <label><%- title %></label>
+          <a class="destroy"></a>
+        </div>
+        <input class="edit" type="text" value="<%- title %>" />
+      </script>
+    </body>
+</html>
