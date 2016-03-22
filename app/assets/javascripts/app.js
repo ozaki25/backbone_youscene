@@ -24,7 +24,8 @@ $(function(){
             var blog = new Blog({id: id});
             blog.fetch()
                 .done(function() {
-                    Show.render(blog.attributes);
+                    var Show = new ShowView({model: blog})
+                    Show.render();
                 })
                 .fail(function() {
                     console.log("blog fetch failed");
@@ -178,13 +179,12 @@ $(function(){
         initialize: function() {
             console.log("show initialize");
         },
-        render: function(blog) {
+        render: function() {
             console.log("show render");
-            this.$el.html(this.template(blog));
+            this.$el.html(this.template(this.model.toJSON()));
             return this;
         }
     });
-    var Show = new ShowView;
 
     Backbone.history.start();
 });

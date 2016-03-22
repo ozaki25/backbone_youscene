@@ -74,6 +74,10 @@ a:focus {
   margin: 10px;
 }
 
+.show-blog {
+   margin-bottom: 10px;
+}
+
 .show-title {
   font-size:200%;
   color:#006633;
