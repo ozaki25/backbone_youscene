@@ -174,6 +174,8 @@ $(function(){
             '</div>'
         ),
         events: {
+            "click #edit_blog": "edit",
+            "click #delete_blog": "destroy"
         },
         initialize: function() {
             console.log("show initialize");
@@ -182,6 +184,17 @@ $(function(){
             console.log("show render");
             this.$el.html(this.template(this.model.toJSON()));
             return this;
+        },
+        edit: function() {
+        },
+        destroy: function() {
+            var isDestroy = confirm("削除してよろしいですか。");
+            if(isDestroy) {
+                this.model.destroy();
+                router.navigate("", {trigger:true});
+            } else {
+                return;
+            }
         }
     });
 
