@@ -47,14 +47,14 @@ $(function(){
     var BlogView = Backbone.View.extend({
         tagName:  "div",
         template: _.template(
-            '<div class="index-blog row">' +
-                '<div class="index-title col-md-8">' +
+            '<div class="index-blog">' +
+                '<div class="index-title">' +
                     '<a href="#<%- id %>">' +
                         '<%- title %>' +
                     '</a>' +
                 '</div>' +
-                '<div class="col-md-4 text-right">' +
-                    '<ul class="list-inline">' +
+                '<div>' +
+                    '<ul class="list-inline index-blog-info">' +
                         '<li><%- author %></li>' +
                         '<li><%- updated_at %></li>' +
                     '</ul>' +
@@ -85,7 +85,6 @@ $(function(){
         },
         initialize: function() {
             console.log("index initialize");
-            this.listenTo(Blogs, 'add', this.addOne);
             this.listenTo(Blogs, 'reset', this.addAll);
         },
         render: function() {
@@ -143,7 +142,7 @@ $(function(){
             Blogs.create({
                 title: this.$("input#title").val(),
                 author: this.$("input#author").val(),
-                content: this.$("input#content").val()
+                content: this.$("textarea#content").val()
             });
             router.navigate("index", {trigger:true});
         }
