@@ -1,5 +1,5 @@
 class BlogsController < ApplicationController
-  before_action :set_blog, only: %i(update destroy)
+  before_action :set_blog, only: %i(show update destroy)
 
   # GET /blogs
   # GET /blogs.json

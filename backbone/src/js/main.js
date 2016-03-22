@@ -20,12 +20,19 @@ $(function(){
         },
         show : function show(id) {
             console.log('show');
-            var blog = Blogs.get(id);
-            Show.render(blog);
+            var blog = new Blog({id: id});
+            blog.fetch()
+                .done(function() {
+                    Show.render(blog.attributes);
+                })
+                .fail(function() {
+                    console.log("blog fetch failed");
+                });
         }
     });
 
     var Blog = Backbone.Model.extend({
+        urlRoot: "/blogs",
         defaults: function() {
             return {
                 title: "empty todo...",
@@ -172,7 +179,7 @@ $(function(){
         },
         render: function(blog) {
             console.log("show render");
-            this.$el.html(this.template(blog.toJSON()));
+            this.$el.html(this.template(blog));
             return this;
         }
     });
