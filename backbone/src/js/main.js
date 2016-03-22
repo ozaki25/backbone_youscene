@@ -151,7 +151,7 @@ $(function(){
                 author: this.$("input#author").val(),
                 content: this.$("textarea#content").val()
             });
-            router.navigate("index", {trigger:true});
+            router.navigate("", {trigger:true});
         }
     });
     var NewBlog = new NewBlogView;
