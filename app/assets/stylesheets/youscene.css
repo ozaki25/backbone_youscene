@@ -70,7 +70,8 @@ a:focus {
   font-size:150%;
 }
 
-.new-blog {
+.new-blog,
+.edit-blog {
   margin: 10px;
 }
 

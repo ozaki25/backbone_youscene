@@ -6,10 +6,11 @@ var Backbone = require('backbone');
 $(function(){
     var Router = Backbone.Router.extend({
         routes : {
-            ''      : 'index',
-            'index' : 'index',
-            'new'   : 'newBlog',
-            ':id'   : 'show'
+            ''         : 'index',
+            'index'    : 'index',
+            'new'      : 'newBlog',
+            ':id/edit' : 'edit',
+            ':id'      : 'show'
         },
         index : function index() {
             console.log('index');
@@ -18,6 +19,18 @@ $(function(){
         newBlog : function newBlog() {
             console.log('newBlog');
             NewBlog.render();
+        },
+        edit : function edit(id) {
+            console.log('edit');
+            var blog = new Blog({id: id});
+            blog.fetch()
+                .done(function() {
+                    var Edit = new EditView({model: blog})
+                    Edit.render();
+                })
+                .fail(function() {
+                    console.log("blog fetch failed");
+                });
         },
         show : function show(id) {
             console.log('show');
@@ -187,6 +200,7 @@ $(function(){
             return this;
         },
         edit: function() {
+            router.navigate(this.model.get("id") + "/edit", {trigger:true});
         },
         destroy: function() {
             var isDestroy = confirm("削除してよろしいですか。");
@@ -196,6 +210,49 @@ $(function(){
             } else {
                 return;
             }
+        }
+    });
+
+    var EditView = Backbone.View.extend({
+        el: $("#main"),
+        template: _.template(
+            '<div class="row edit-blog">' +
+                '<div class="col-md-10 col-md-offset-1">' +
+                    '<div class="form-group">' +
+                        '<label>タイトル</label>' +
+                        '<input type="text" id="title" class="form-control" value="<%- title%>">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                        '<label>投稿者</label>' +
+                        '<input type="text" id="author" class="form-control" value="<%- author %>">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                        '<label>内容</label>' +
+                        '<textarea id="content" class="form-control" rows="10"><%- content %></textarea>' +
+                    '</div>' +
+                    '<button id="update_blog" class="btn btn-youscene">投稿</button>' +
+                '</div>' +
+            '</div>'
+        ),
+        events: {
+            "click #update_blog": "update"
+        },
+        initialize: function() {
+            console.log("edit blog initialize");
+        },
+        render: function() {
+            console.log("edit blog render");
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        },
+        update: function() {
+            console.log("update");
+            this.model.save({
+                title: this.$("input#title").val(),
+                author: this.$("input#author").val(),
+                content: this.$("textarea#content").val()
+            });
+            router.navigate("", {trigger:true});
         }
     });
 
