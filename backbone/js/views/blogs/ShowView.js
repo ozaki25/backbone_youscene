@@ -40,7 +40,7 @@ module.exports = Backbone.View.extend({
     },
     edit: function() {
         console.log('ShowView', 'edit', new Date());
-        Backbone.history.navigate(this.model.get('id') + '/edit', {trigger:true});
+        Backbone.history.navigate('/blogs/' + this.model.get('id') + '/edit', {trigger:true});
     },
     destroy: function() {
         console.log('ShowView', 'destroy', new Date());

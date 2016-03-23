@@ -7,7 +7,7 @@ module.exports = Backbone.View.extend({
     template: _.template(
         '<div class="index-blog">' +
             '<div class="index-title">' +
-                '<a href="#<%- id %>">' +
+                '<a href="/blogs/<%- id %>">' +
                     '<%- title %>' +
                 '</a>' +
             '</div>' +
@@ -33,3 +33,4 @@ module.exports = Backbone.View.extend({
         return this;
     }
 });
+

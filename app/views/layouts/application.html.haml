@@ -22,13 +22,11 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          = link_to 'youScene', '#', class: 'navbar-brand'
+          = link_to 'youScene', root_path, class: 'navbar-brand'
         .collapse.navbar-collapse
           %ul.nav.navbar-nav.navbar-right
-            %li
-              %a{href: '#new'} 新規作成
-            %li
-              %a{href: '#'} テストユーザ
+            %li= link_to '新規作成', new_blog_path
+            %li= link_to 'テストユーザ', '#'
     #main.container
       = yield
     %script{src: '/assets/app.js'}

@@ -10,11 +10,11 @@ var ShowView = require('../views/blogs/ShowView');
 
 module.exports =  Backbone.Router.extend({
     routes : {
-        ''         : 'index',
-        'index'    : 'index',
-        'new'      : 'newBlog',
-        ':id/edit' : 'edit',
-        ':id'      : 'show'
+        ''               : 'index',
+        'blogs'          : 'index',
+        'blogs/new'      : 'newBlog',
+        'blogs/:id/edit' : 'edit',
+        'blogs/:id'      : 'show'
     },
     index : function index() {
         console.log('Rotuer', 'index', new Date());
