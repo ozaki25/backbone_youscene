@@ -4,6 +4,8 @@ var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 
 $(function(){
+    var App = new Marionette.Application();
+
     var BlogsRouter =  Marionette.AppRouter.extend({
         appRoutes : {
             ''               : 'index',
@@ -51,7 +53,6 @@ $(function(){
             }
         }
     });
-    var router = new BlogsRouter;
 
     var Blog = Backbone.Model.extend({
         urlRoot: '/blogs',
@@ -290,5 +291,13 @@ $(function(){
         }
     });
 
-    Backbone.history.start({pushState: true});
+    App.on("before:start", function(){
+        new BlogsRouter();
+    });
+
+    App.on('start', function() {
+        Backbone.history.start({pushState: true});
+    });
+
+    App.start();
 });

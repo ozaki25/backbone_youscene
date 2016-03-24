@@ -16,8 +16,7 @@ gulp.task('build', () => {
 // browserify
 gulp.task('browserify', () => {
     browserify({
-        //entries: ['./backbone/js/app.js'],
-        entries: ['./backbone/js/main.js'],
+        entries: ['./backbone/js/app.js'],
         require: ['jquery', 'underscore','backbone']
     })
     .bundle()
