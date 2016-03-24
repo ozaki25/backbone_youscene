@@ -20,14 +20,12 @@ module.exports =  Marionette.AppRouter.extend({
     controller: {
         index : function index() {
             console.log('Rotuer', 'index', new Date());
-            var blogs = new Blogs();
-            var index = new IndexView({collection: blogs});
+            var index = new IndexView({collection: new Blogs});
             index.render();
         },
         newBlog : function newBlog() {
             console.log('Router', 'newBlog', new Date());
-            var blogs = new Blogs();
-            var newBlog = new NewView({collection: blogs});
+            var newBlog = new NewView({collection: new Blogs});
             newBlog.render();
         },
         edit : function edit(id) {

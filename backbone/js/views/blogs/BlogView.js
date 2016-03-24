@@ -29,7 +29,6 @@ module.exports = Backbone.View.extend({
     render: function() {
         console.log('BlogView', 'render', new Date());
         this.$el.html(this.template(this.model.toJSON()));
-        this.input = this.$('.edit');
         return this;
     }
 });

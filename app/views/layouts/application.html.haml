@@ -27,6 +27,8 @@
           %ul.nav.navbar-nav.navbar-right
             %li= link_to '新規作成', new_blog_path
             %li= link_to 'テストユーザ', '#'
-    #main.container
-      = yield
+    .container#main_container
+      .row
+        .col-md-9#main
+        .col-md-3#side_menu
     %script{src: '/assets/app.js'}

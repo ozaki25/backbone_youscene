@@ -3,6 +3,20 @@ body {
   background-color:#c3da9f;
 }
 
+@media (min-width: 992px) {
+  #main {
+    border-right: 1px solid rgba(0, 0, 0, .1);
+    box-shadow: -1px 0 0 rgba(255, 255, 255, 0) inset;
+  }
+}
+
+@media (max-width: 991px) {
+  #main {
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0);
+  }
+}
+
 a {
   color: #336633;
 }
@@ -57,7 +71,7 @@ a:focus {
   background-color: transparent;
 }
 
-.container#main {
+.container#main_container {
   background-color:#fffff0;
 }
 
