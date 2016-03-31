@@ -10,21 +10,26 @@ gulp.task('default', ['build']);
 
 // build
 gulp.task('build', () => {
-    runSequence(['css', 'browserify']);
+    runSequence(['html', 'css', 'browserify']);
 });
 
 // browserify
 gulp.task('browserify', () => {
     browserify({
-        entries: ['./backbone/js/app.js'],
+        entries: ['./src/app/scripts/app.js'],
         require: ['jquery', 'underscore','backbone']
     })
     .bundle()
     .pipe(source('app.js'))
-    .pipe(gulp.dest('./public/assets/'));
+    .pipe(gulp.dest('./dist/app/scripts/'));
 });
 
 gulp.task('css', () => {
-    gulp.src('./backbone/css/*.css')
-        .pipe(gulp.dest('./app/assets/stylesheets/'));
+    gulp.src('./src/app/styles/*.css')
+        .pipe(gulp.dest('./dist/app/styles/'));
+});
+
+gulp.task('html', () => {
+    gulp.src('./src/app/index.html')
+        .pipe(gulp.dest('./dist/app/'));
 });
