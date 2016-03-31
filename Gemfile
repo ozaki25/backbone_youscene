@@ -30,6 +30,7 @@ gem 'roboto'
 # gem 'business_time'
 # gem 'holiday_jp'
 # gem 'therubyracer'
+gem 'rack-cors', :require => 'rack/cors'
 
 #--------------------------------------------------------------------------------
 # View Helpers
