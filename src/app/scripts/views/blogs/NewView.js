@@ -4,7 +4,6 @@ var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.View.extend({
-    el: $('#content'),
     template: _.template(
         '<div class="row new-blog">' +
             '<div class="col-md-10 col-md-offset-1">' +

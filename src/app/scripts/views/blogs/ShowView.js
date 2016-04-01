@@ -5,7 +5,6 @@ var Marionette = require('backbone.marionette');
 var LikeView = require('./LikeView');
 
 module.exports = Marionette.View.extend({
-    el: $('#content'),
     template: _.template(
         '<div class="show-blog">' +
             '<div class="show-title"><%- title %></div>' +

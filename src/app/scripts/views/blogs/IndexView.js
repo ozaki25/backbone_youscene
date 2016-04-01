@@ -4,30 +4,21 @@ var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var BlogView = require('./BlogView');
 
-module.exports = Marionette.View.extend({
-    el: $('#content'),
-    template: _.template(
-        '<div id="blog_list"></div>'
-    ),
-    events: {
-    },
+module.exports = Marionette.CompositeView.extend({
+    chiledView: BlogView,
+    chiledViewContainer: $('#blog_list'),
+    template: '#index_view',
     initialize: function() {
         console.log('IndexView', 'initialize', new Date());
-        this.listenTo(this.collection, 'reset', this.addAll);
-    },
-    render: function() {
-        console.log('IndexView', 'render', new Date());
-        this.collection.fetch({reset: true});
-        this.$el.html(this.template());
-        return this;
+        //this.listenTo(this.collection, 'reset', this.addAll);
     },
     addOne: function(blog) {
         console.log('IndexView', 'addOne', new Date());
-        var view = new BlogView({model: blog});
-        this.$("#blog_list").append(view.render().el);
+        //var view = new BlogView({model: blog});
+        //this.$("#blog_list").append(view.render().el);
     },
     addAll: function() {
         console.log('IndexView', 'addAll', new Date());
-        this.collection.each(this.addOne, this);
+        //this.collection.each(this.addOne, this);
     }
 });

@@ -6,13 +6,14 @@ var Router = require('./routers/BlogsRouter');
 
 var App = new Marionette.Application();
 
-App.on("before:start", function(){
+App.on('start', function() {
     new Router();
+    Backbone.history.start();
 });
 
-App.on('start', function() {
-    //Backbone.history.start({pushState: true});
-    Backbone.history.start({pushState: false});
+App.addRegions({
+    mainRegion: '#main',
+    sideMenuRegion: '#side_menu'
 });
 
 App.start();
