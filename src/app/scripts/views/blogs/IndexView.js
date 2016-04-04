@@ -12,6 +12,19 @@ module.exports = Marionette.CompositeView.extend({
         console.log('IndexView', 'initialize', new Date());
         //this.listenTo(this.collection, 'reset', this.addAll);
     },
+    onBeforeRender: function() {
+        console.log('IndexView', 'onBeforeRender', new Date());
+        this.collection.fetch()
+        console.log(this.collection);
+        console.log(this.collection.models);
+        console.log(this.collection.models.length);
+        this.collection.fetch()
+    },
+    onRender: function() {
+        //this.collection.fetch({reset: true});
+        console.log('IndexView', 'onRender', new Date());
+        console.log(this.collection);
+    },
     addOne: function(blog) {
         console.log('IndexView', 'addOne', new Date());
         //var view = new BlogView({model: blog});
