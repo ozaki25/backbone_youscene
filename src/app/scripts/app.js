@@ -2,10 +2,13 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
+var Blog = require('./models/Blog');
 var Blogs = require('./collections/Blogs');
 var HeaderView = require('./views/HeaderView');
 var IndexView = require('./views/blogs/IndexView');
 var NewView = require('./views/blogs/NewView');
+var EditView = require('./views/blogs/EditView');
+var ShowView = require('./views/blogs/ShowView');
 
 var appRouter =  Marionette.AppRouter.extend({
     appRoutes: {
@@ -22,19 +25,32 @@ var appRouter =  Marionette.AppRouter.extend({
     controller: {
         index : function index() {
             console.log('Rotuer', 'index', new Date());
-            App.getRegion('main').show(new IndexView({collection: new Blogs}));
+            var blogs = new Blogs();
+            blogs.fetch()
+                .done(function() {
+                    App.getRegion('main').show(new IndexView({collection: blogs}));
+                })
+                .fail(function() {
+                    console.log('Router', 'blog fetch failed', new Date());
+                });
         },
         newBlog : function newBlog() {
             console.log('Router', 'newBlog', new Date());
-            App.getRegion('main').show(new NewView());
+            var blogs = new Blogs();
+            blogs.fetch()
+                .done(function() {
+                    App.getRegion('main').show(new NewView({collection: blogs}));
+                })
+                .fail(function() {
+                    console.log('Router', 'blog fetch failed', new Date());
+                });
         },
         edit : function edit(id) {
             console.log('Router', 'edit', new Date());
             var blog = new Blog({id: id});
             blog.fetch()
                 .done(function() {
-                    var Edit = new EditView({model: blog});
-                    Edit.render();
+                    App.getRegion('main').show(new EditView({model: blog}));
                 })
                 .fail(function() {
                     console.log('Router', 'blog fetch failed', new Date());
@@ -45,8 +61,7 @@ var appRouter =  Marionette.AppRouter.extend({
             var blog = new Blog({id: id});
             blog.fetch()
                 .done(function() {
-                    var Show = new ShowView({model: blog});
-                    Show.render();
+                    App.getRegion('main').show(new ShowView({model: blog}));
                 })
                 .fail(function() {
                     console.log('Router', 'blog fetch failed', new Date());
