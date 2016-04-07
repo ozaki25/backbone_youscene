@@ -1,10 +1,13 @@
-var $ = require('jquery');
-var _ = require('underscore');
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.ItemView.extend({
     template: '#new_view',
+    ui: {
+        title: 'input#title',
+        author: 'input#author',
+        content: 'textarea#content'
+    },
     events: {
         'click #create_blog': 'create'
     },
@@ -12,11 +15,11 @@ module.exports = Marionette.ItemView.extend({
         console.log('New', 'initialize', new Date());
     },
     create: function() {
-        console.log('create', 'render', new Date());
+        console.log('New', 'create', new Date());
         this.collection.create({
-            title: this.$('input#title').val(),
-            author: this.$('input#author').val(),
-            content: this.$('textarea#content').val()
+            title: this.ui.title.val(),
+            author: this.ui.author.val(),
+            content: this.ui.content.val()
         });
         Backbone.history.navigate('', {trigger:true});
     }

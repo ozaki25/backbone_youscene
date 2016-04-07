@@ -4151,6 +4151,18 @@ var NewView = require('./views/blogs/NewView');
 var EditView = require('./views/blogs/EditView');
 var ShowView = require('./views/blogs/ShowView');
 
+var App = new Marionette.Application({
+    regions: {
+        main: '#main',
+        header: '#header',
+        sideMenu: '#side_menu'
+    },
+    onStart: function() {
+        new appRouter();
+        Backbone.history.start();
+    }
+});
+
 var appRouter =  Marionette.AppRouter.extend({
     appRoutes: {
         ''               : 'index',
@@ -4167,59 +4179,28 @@ var appRouter =  Marionette.AppRouter.extend({
         index : function index() {
             console.log('Rotuer', 'index', new Date());
             var blogs = new Blogs();
-            blogs.fetch()
-                .done(function() {
-                    App.getRegion('main').show(new IndexView({collection: blogs}));
-                })
-                .fail(function() {
-                    console.log('Router', 'blog fetch failed', new Date());
-                });
+            blogs.fetch().done(function() {
+                App.getRegion('main').show(new IndexView({collection: blogs}));
+            });
         },
         newBlog : function newBlog() {
             console.log('Router', 'newBlog', new Date());
-            var blogs = new Blogs();
-            blogs.fetch()
-                .done(function() {
-                    App.getRegion('main').show(new NewView({collection: blogs}));
-                })
-                .fail(function() {
-                    console.log('Router', 'blog fetch failed', new Date());
-                });
+            App.getRegion('main').show(new NewView({collection: new Blogs()}));
         },
         edit : function edit(id) {
             console.log('Router', 'edit', new Date());
             var blog = new Blog({id: id});
-            blog.fetch()
-                .done(function() {
-                    App.getRegion('main').show(new EditView({model: blog}));
-                })
-                .fail(function() {
-                    console.log('Router', 'blog fetch failed', new Date());
-                });
+            blog.fetch().done(function() {
+                App.getRegion('main').show(new EditView({model: blog}));
+            });
         },
         show : function show(id) {
             console.log('Router', 'show', new Date());
             var blog = new Blog({id: id});
-            blog.fetch()
-                .done(function() {
-                    App.getRegion('main').show(new ShowView({model: blog}));
-                })
-                .fail(function() {
-                    console.log('Router', 'blog fetch failed', new Date());
-                });
+            blog.fetch().done(function() {
+                App.getRegion('main').show(new ShowView({model: blog}))
+            });
         }
-    }
-});
-
-var App = new Marionette.Application({
-    regions: {
-        main: '#main',
-        header: '#header',
-        sideMenu: '#side_menu'
-    },
-    onStart: function() {
-        new appRouter();
-        Backbone.history.start();
     }
 });
 
@@ -4227,8 +4208,6 @@ App.start();
 
 
 },{"./collections/Blogs":5,"./models/Blog":6,"./views/HeaderView":7,"./views/blogs/EditView":9,"./views/blogs/IndexView":10,"./views/blogs/NewView":12,"./views/blogs/ShowView":13,"backbone":"backbone","backbone.marionette":2,"jquery":"jquery","underscore":"underscore"}],5:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
 var Backbone = require('backbone');
 var Blog = require('../models/Blog');
 
@@ -4240,9 +4219,7 @@ module.exports = Backbone.Collection.extend({
     }
 });
 
-},{"../models/Blog":6,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],6:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
+},{"../models/Blog":6,"backbone":"backbone"}],6:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -4257,10 +4234,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],7:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
-var Backbone = require('backbone');
+},{"backbone":"backbone"}],7:[function(require,module,exports){
 var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.ItemView.extend({
@@ -4270,10 +4244,7 @@ module.exports = Marionette.ItemView.extend({
     }
 });
 
-},{"backbone":"backbone","backbone.marionette":2,"jquery":"jquery","underscore":"underscore"}],8:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
-var Backbone = require('backbone');
+},{"backbone.marionette":2}],8:[function(require,module,exports){
 var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.ItemView.extend({
@@ -4285,14 +4256,17 @@ module.exports = Marionette.ItemView.extend({
 });
 
 
-},{"backbone":"backbone","backbone.marionette":2,"jquery":"jquery","underscore":"underscore"}],9:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
+},{"backbone.marionette":2}],9:[function(require,module,exports){
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.ItemView.extend({
     template: '#edit_view',
+    ui: {
+        title: 'input#title',
+        author: 'input#author',
+        content: 'textarea#content'
+    },
     events: {
         'click #update_blog': 'update'
     },
@@ -4302,15 +4276,15 @@ module.exports = Marionette.ItemView.extend({
     update: function() {
         console.log('EditView', 'update', new Date());
         this.model.save({
-            title: this.$('input#title').val(),
-            author: this.$('input#author').val(),
-            content: this.$('textarea#content').val()
+            title: this.ui.title.val(),
+            author: this.ui.author.val(),
+            content: this.ui.content.val()
         });
         Backbone.history.navigate('', {trigger:true});
     }
 });
 
-},{"backbone":"backbone","backbone.marionette":2,"jquery":"jquery","underscore":"underscore"}],10:[function(require,module,exports){
+},{"backbone":"backbone","backbone.marionette":2}],10:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -4327,9 +4301,6 @@ module.exports = Marionette.CompositeView.extend({
 });
 
 },{"./BlogView":8,"backbone":"backbone","backbone.marionette":2,"jquery":"jquery","underscore":"underscore"}],11:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
-var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.ItemView.extend({
@@ -4339,14 +4310,17 @@ module.exports = Marionette.ItemView.extend({
     }
 });
 
-},{"backbone":"backbone","backbone.marionette":2,"jquery":"jquery","underscore":"underscore"}],12:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
+},{"backbone.marionette":2}],12:[function(require,module,exports){
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.ItemView.extend({
     template: '#new_view',
+    ui: {
+        title: 'input#title',
+        author: 'input#author',
+        content: 'textarea#content'
+    },
     events: {
         'click #create_blog': 'create'
     },
@@ -4354,19 +4328,17 @@ module.exports = Marionette.ItemView.extend({
         console.log('New', 'initialize', new Date());
     },
     create: function() {
-        console.log('create', 'render', new Date());
+        console.log('New', 'create', new Date());
         this.collection.create({
-            title: this.$('input#title').val(),
-            author: this.$('input#author').val(),
-            content: this.$('textarea#content').val()
+            title: this.ui.title.val(),
+            author: this.ui.author.val(),
+            content: this.ui.content.val()
         });
         Backbone.history.navigate('', {trigger:true});
     }
 });
 
-},{"backbone":"backbone","backbone.marionette":2,"jquery":"jquery","underscore":"underscore"}],13:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
+},{"backbone":"backbone","backbone.marionette":2}],13:[function(require,module,exports){
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var LikeView = require('./LikeView');
@@ -4414,7 +4386,7 @@ module.exports = Marionette.LayoutView.extend({
     }
 });
 
-},{"./LikeView":11,"backbone":"backbone","backbone.marionette":2,"jquery":"jquery","underscore":"underscore"}],"backbone":[function(require,module,exports){
+},{"./LikeView":11,"backbone":"backbone","backbone.marionette":2}],"backbone":[function(require,module,exports){
 (function (global){
 //     Backbone.js 1.3.2
 
