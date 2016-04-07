@@ -4,12 +4,15 @@ var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var LikeView = require('./LikeView');
 
-module.exports = Marionette.ItemView.extend({
+module.exports = Marionette.LayoutView.extend({
     template: '#show_view',
     ui: {
         edit: '#edit_blog',
         destroy: '#delete_blog',
         like: '#like_btn'
+    },
+    regions: {
+        like: '#like_count'
     },
     events: {
         'click @ui.edit': 'edit',
@@ -18,6 +21,10 @@ module.exports = Marionette.ItemView.extend({
     },
     initialize: function() {
         console.log('ShowView', 'initialize', new Date());
+    },
+    onRender: function() {
+        console.log('ShowView', 'onRender', new Date());
+        this.getRegion('like').show(new LikeView({model: this.model}))
     },
     edit: function() {
         console.log('ShowView', 'edit', new Date());
@@ -36,7 +43,6 @@ module.exports = Marionette.ItemView.extend({
     addLike: function() {
         console.log('ShowView', 'addLike', new Date());
         this.model.save({likes: this.model.get('likes') + 1});
-        var view = new LikeView({model: this.model});
-        this.$('#like_count').html(view.render().el);
+        this.getRegion('like').show(new LikeView({model: this.model}))
     }
 });
