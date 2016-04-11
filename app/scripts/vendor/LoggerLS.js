@@ -37,6 +37,7 @@ var Logger = {
         if(param && typeof param.objName !== 'undefined') logData.obj = param.objName;
         if(param && typeof param.objId !== 'undefined') logData.objId = param.objId;
         ls.setItem(key, JSON.stringify(logData));
+        console.log(LogFormatter.formatLog(logData, this.deviceId));// original
     },
     debug: function(str, param) {
         this.logWrite(this.DEBUG_LEVEL, str, param);

@@ -1,8 +1,8 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var Backbone = require('backbone');
+var Framework = require('../vendor/Framework');
 var Blog = require('../models/Blog');
 
-module.exports = Backbone.Collection.extend({
+module.exports = Framework.Collection.extend({
     model: Blog,
     url: 'http://localhost:3001/blogs',
     initialize: function() {
@@ -10,11 +10,9 @@ module.exports = Backbone.Collection.extend({
     }
 });
 
-},{"../models/Blog":3,"backbone":"backbone"}],2:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
-var Backbone = require('backbone');
-var Marionette = require('backbone.marionette');
+},{"../models/Blog":3,"../vendor/Framework":5}],2:[function(require,module,exports){
+var Framework = require('./vendor/Framework');
+var Logger = require('./vendor/Logger');
 var Blog = require('./models/Blog');
 var Blogs = require('./collections/Blogs');
 var HeaderView = require('./views/HeaderView');
@@ -23,19 +21,7 @@ var NewView = require('./views/blogs/NewView');
 var EditView = require('./views/blogs/EditView');
 var ShowView = require('./views/blogs/ShowView');
 
-var App = new Marionette.Application({
-    regions: {
-        main: '#main',
-        header: '#header',
-        sideMenu: '#side_menu'
-    },
-    onStart: function() {
-        new appRouter();
-        Backbone.history.start();
-    }
-});
-
-var appRouter =  Marionette.AppRouter.extend({
+var appRouter =  Framework.AppRouter.extend({
     appRoutes: {
         ''               : 'index',
         'blogs'          : 'index',
@@ -76,13 +62,24 @@ var appRouter =  Marionette.AppRouter.extend({
     }
 });
 
+var App = new Framework.Application({
+    initialize: function(options) {
+        Logger.clear();
+    },
+    router: appRouter,
+    regions: {
+        main: '#main',
+        header: '#header',
+        sideMenu: '#side_menu'
+    }
+});
+
 App.start();
 
+},{"./collections/Blogs":1,"./models/Blog":3,"./vendor/Framework":5,"./vendor/Logger":7,"./views/HeaderView":9,"./views/blogs/EditView":11,"./views/blogs/IndexView":12,"./views/blogs/NewView":14,"./views/blogs/ShowView":15}],3:[function(require,module,exports){
+var Framework = require('../vendor/Framework');
 
-},{"./collections/Blogs":1,"./models/Blog":3,"./views/HeaderView":4,"./views/blogs/EditView":6,"./views/blogs/IndexView":7,"./views/blogs/NewView":9,"./views/blogs/ShowView":10,"backbone":"backbone","backbone.marionette":12,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
-var Backbone = require('backbone');
-
-module.exports = Backbone.Model.extend({
+module.exports = Framework.Model.extend({
     urlRoot: 'http://localhost:3001/blogs',
     defaults: function() {
         return {
@@ -94,17 +91,433 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"backbone":"backbone"}],4:[function(require,module,exports){
-var Marionette = require('backbone.marionette');
+},{"../vendor/Framework":5}],4:[function(require,module,exports){
+var Config = {logLevel: 2}
 
-module.exports = Marionette.ItemView.extend({
+module.exports = Config;
+
+},{}],5:[function(require,module,exports){
+var $ = require('jquery');
+var _ = require('underscore');
+var Backbone = require('backbone');
+var Marionette = require('backbone.marionette');
+var Logger = require('./Logger');
+var Config = require('./Config');
+
+module.exports = (function() {
+    var Framework = {};
+
+    Framework.reference = {
+        Model: new Backbone.Model(),
+        Collection: new Backbone.Collection(),
+        ItemView: new Marionette.ItemView(),
+        CompositeView: new Marionette.CompositeView(),
+        CollectionView: new Marionette.CollectionView(),
+        LayoutView: new Marionette.LayoutView(),
+        AppRouter: new Marionette.AppRouter(),
+        Application: new Marionette.Application()
+    };
+    Framework.Logger = Logger;
+
+    window.onerror = function(msg, url, line, col, err) {
+        console.log(msg);
+        console.log(url);
+        console.log(line + ':' + col);
+        console.log(err);
+
+        Framework.Logger.error('[ERROR]' + msg + ':' + url + ':' + line + ':' + col);
+    };
+
+
+    Framework.Application = Marionette.Application.extend({
+        logLevel: 0,
+        log: Logger,
+        deviceId: null,
+        router: null,
+        models: {},
+
+        constructor: function(options) {
+            var tmpLogLevel = (!options.logLevel || !_.contains([0, 1, 2, 3, 4], options.logLevel)) ? 1 : options.tmpLogLevel;
+            if(typeof Config !== 'undefined') this.logLevel = (!Config.logLevel || tmpLogLevel > Config.logLevel) ? tmpLogLevel : Config.logLevel;
+            Framework.Logger.setLogLevel(this.logLevel);
+
+            if(typeof options.deviceId !== 'undefined') this.deviceId = options.deviceId;
+            if(typeof options.router !== 'undefined') this.router = options.router;
+            if(options && options.id) this.id = options.id;
+
+            var modName = this.moduleName || 'Appliation';
+            this.listenTo(this, 'start', function() {
+                var name = this.moduleName || 'Application';
+                var modId = this.id;
+                Framework.Logger.info('[APPLICATION_START]', {objName: name, objId: modId});
+                if(this.router) new this.router();
+            });
+            Backbone.history.start();
+            addLogCode(this, modName, this.id, Framework.reference.Application);
+            Marionette.Application.apply(this, arguments);
+        }
+    });
+
+    Framework.AppRouter = Marionette.AppRouter.extend({
+        constructor: function(param) {
+            var name = this.moduleName || 'AppRouter';
+            if(param && param.id) this.id = param.id;
+            var modId = this.id;
+            Framework.Logger.info('[CONSTRACTOR_START]', {objName: name, objId: modId});
+            addLogCode(this, name, modId, Framework.reference.AppRouter);
+            Marionette.AppRouter.apply(this, arguments);
+            Framework.Logger.info('[CONSTRACTOR_END]', {objName: name, objId: modId});
+        }
+    });
+
+    Framework.RootChannel = Backbone.Wreqr.radio.channel('root');
+    Framework.RootChannelEvent = Framework.RootChannel.vent;
+    Framework.PageChannel = Backbone.Wreqr.radio.channel('page');
+    Framework.RootChannelEvent = Framework.PageChannel.vent;
+
+
+    Framework.LayoutView = Marionette.LayoutView.extend({
+        constructor: function(param) {
+            var name = this.moduleName || 'LayoutView';
+            if(param && param.id) this.id = param.id;
+            var modId = this.id;
+            Framework.Logger.info('[CONSTRACTOR_START]', {objName: name, objId: modId});
+            this.models = param.models;
+            this.pageChannel = Framework.PageChannel;
+            this.pageChannelEvent = Framework.PageChannelEvent;
+
+            addLogCodeForView(this, name, modId, Framework.reference.LayoutView);
+            Marionette.LayoutView.apply(this, arguments);
+            Framework.Logger.info('[CONSTRACTOR_END]', {objName: name, objId: modId});
+        }
+    });
+
+    Framework.CompositeView = Marionette.CompositeView.extend({
+        constructor: function(param) {
+            var name = this.moduleName || 'CompositeView';
+            if(param && param.id) this.id = param.id;
+            var modId = this.id;
+            Framework.Logger.info('[CONSTRACTOR_START]', {objName: name, objId: modId});
+
+            addLogCodeForView(this, name, modId, Framework.reference.CompositeView);
+            Marionette.CompositeView.apply(this, arguments);
+            Framework.Logger.info('[CONSTRACTOR_END]', {objName: name, objId: modId});
+        }
+    });
+
+    Framework.CollectionView = Marionette.CollectionView.extend({
+        constructor: function(param) {
+            var name = this.moduleName || 'CollectionView';
+            if(param && param.id) this.id = param.id;
+            var modId = this.id;
+            Framework.Logger.info('[CONSTRACTOR_START]', {objName: name, objId: modId});
+
+            addLogCodeForView(this, name, modId, Framework.reference.CollectionView);
+            Marionette.CollectionView.apply(this, arguments);
+            Framework.Logger.info('[CONSTRACTOR_END]', {objName: name, objId: modId});
+        }
+    });
+
+    Framework.ItemView = Marionette.ItemView.extend({
+        constructor: function(param) {
+            var name = this.moduleName || 'ItemView';
+            if(param && param.id) this.id = param.id;
+            var modId = this.id;
+            Framework.Logger.info('[CONSTRACTOR_START]', {objName: name, objId: modId});
+
+            addLogCodeForView(this, name, modId, Framework.reference.ItemView);
+            Marionette.ItemView.apply(this, arguments);
+            Framework.Logger.info('[CONSTRACTOR_END]', {objName: name, objId: modId});
+        }
+    });
+
+    Framework.ComponentView = Marionette.CompositeView.extend({
+        constructor: function(param) {
+            var name = this.moduleName || 'ComponentView';
+            if(param && param.id) this.id = param.id;
+            var modId = this.id;
+            Framework.Logger.info('[CONSTRACTOR_START]', {objName: name, objId: modId});
+
+            var tmpEvents = {};
+            var mapping = param.map;
+            for(var i in mapping) {
+                var eleId = '#' + i;
+                var mapData = mapping[i];
+                if(!Array.isArray(mapData)) mapData = [mapData];
+                for(var j = 0; j < mapData.length; j++) {
+                    var mapItem = mapData[j];
+                    var actionStr = mapItem.action + 'eleId';
+                    if(mapItem.target === 'root') {
+                        tmpEvents[actionStr] = this.createEventHandler(Framework.RootChannel, mapItem.event, '[COMPONENT_VIEW_EVENT]' + mapItem.target + ':' + actionStr + ':' + mapItem.event, {objectName: name, objId: modId});
+                    } else if(mapItem.target === 'page') {
+                        tmpEvents[actionStr] = this.createEventHandler(Framework.PageChannel, mapItem.event, '[COMPONENT_VIEW_EVENT]' +  mapItem.target + ':' + actionStr + ':' + mapItem.event, {objectName: name, objId: modId});
+                    } else {
+                        Framework.Logger.error('[COMPONENT_VIEW_ERROR] Unknown Target Channel = ' + mapItem.target, {objectName: name, objId: modId});
+                    }
+                }
+            }
+
+            addLogCodeForView(this, name, modId, Framework.reference.CompositeView);
+            Marionette.CompositeView.apply(this, arguments);
+            this.delefateEvents(tmpEvents);
+            Framework.Logger.info('[CONSTRACTOR_END]', {objName: name, objId: modId});
+        },
+        createEventHandler: function(channel, event, logStr, logParam) {
+            var func = function() {
+                Framework.Logger.info(logStr, logParam);
+                channel.vent.trigger(event);
+            };
+            return func;
+        }
+    });
+
+    Framework.Collection = Backbone.Collection.extend({
+        constructor: function(param) {
+            var name = this.moduleName || 'Collection';
+            if(param && param.id) this.id = param.id;
+            var modId = this.id;
+            Framework.Logger.info('[CONSTRACTOR_START]', {objName: name, objId: modId});
+
+            this.listenTo(this, 'all', function(eventName) {
+                Framework.Logger.debug('[MODEL_EVENT]' + eventName + {objName: name, objId: modId});
+                Framework.Logger.debug(JSON.stringify(arguments), {objName: name, objId: modId});
+            });
+
+            addLogCode(this, name, modId, Framework.reference.Model);
+            Backbone.Collection.apply(this, arguments);
+            Framework.Logger.info('[CONSTRACTOR_END]', {objName: name, objId: modId});
+        }
+    });
+
+    Framework.Model = Backbone.Model.extend({
+        constructor: function(param) {
+            var name = this.moduleName || 'Model';
+            if(param && param.id) this.id = param.id;
+            var modId = this.id;
+            Framework.Logger.info('[CONSTRACTOR_START]', {objName: name, objId: modId});
+
+            this.listenTo(this, 'all', function(eventName) {
+                Framework.Logger.debug('[MODEL_EVENT]' + eventName + {objName: name, objId: modId});
+                Framework.Logger.debug(JSON.stringify(arguments), {objName: name, objId: modId});
+            });
+
+            addLogCode(this, name, modId, Framework.reference.Model);
+            Backbone.Model.apply(this, arguments);
+            Framework.Logger.info('[CONSTRACTOR_END]', {objName: name, objId: modId});
+        }
+    });
+
+    return Framework;
+
+    function addLogCode(orgThis, modName, modId, refObj) {
+        addLogCodeImpl(orgThis, modName, modId, refObj, false);
+    }
+    function addLogCodeForView(orgThis, modName, modId, refObj) {
+        addLogCodeImpl(orgThis, modName, modId, refObj, true);
+    }
+    function addLogCodeImpl(orgThis, modName, modId, refObj, viewFlag) {
+        var funcThis = _.functions(orgThis);
+        var funcOrg = _.functions(refObj);
+        var funcDiff = viewFlag ? _.without(_.difference(funcThis, funcOrg), 'template', 'childView') : _.difference(funcThis, funcOrg);
+        for(var i = 0; i < funcDiff; i++) {
+            var funcName = funcDiff[i];
+            var tmpFunc = orgThis[funcName];
+            orgThis[funcName] = _.wrap(tmpFunc, function(func) {
+                var args = [];
+                if(arguments.length > 1) {
+                    for(var i = 1; i < arguments.length; i++) {
+                        args.push(arguments[i]);
+                    }
+                }
+                Framework.Logger.info('[FUNCTION_START] ' + funcName, {objName: name, objId: modId});
+                func.apply(orgThis, args);
+                Framework.Logger.info('[FUNCTION_END] ' + funcName, {objName: name, objId: modId});
+            });
+        }
+    }
+})();
+
+},{"./Config":4,"./Logger":7,"backbone":"backbone","backbone.marionette":17,"jquery":"jquery","underscore":"underscore"}],6:[function(require,module,exports){
+var LoggerFormatter = {
+    DEBUG_LEVEL: 3,
+    INFO_LEVEL: 2,
+    ERROR_LEVEL: 1,
+
+    getTimestamp: function(orgms) {
+        var date = new Date(orgms);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        var sec = date.getSeconds();
+        var ms = date.getMilliseconds();
+        if(month < 10) month = '0' + month;
+        if(day < 10) day = '0' + day;
+        if(min < 10) min = '0' + min;
+        if(sec < 10) sec = '0' + sec;
+        if(ms < 10) ms = '00' + ms;
+        else if(ms < 100) ms = '0' + ms;
+
+        var result = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec + '.' + ms;
+        return result;
+    },
+    formatLog: function(logData, deviceId) {
+        var prefix = '';
+        switch(logData.level) {
+            case this.ERROR_LEVEL:
+                prefix += 'ERROR';
+                break;
+            case this.INFO_LEVEL:
+                prefix += 'INFO';
+                break;
+            case this.DEBUG_LEVEL:
+                prefix += 'DEBUG';
+                break;
+            default:
+                prefix += 'UNDEFINED'
+                break;
+        }
+        var logVarStr = ' ';
+        if(deviceId) logVarStr += deviceId + ' ';
+        if(logData.obj) logVarStr += logData.obj + ' ';
+        if(logData.objId) logVarStr += logData.objId + ' ';
+
+        var logStr = this.getTimestamp(logData.time) + ' ' + prefix + logVarStr + '- ' + logData.log;
+        return logStr;
+    },
+    formatLogs: function(logArray, deviceId) {
+        var logStrArray = [];
+        for(var i = 0; i < logArray.length; i++) {
+            logStrArray.push(this.formatLog(logArray[i], deviceId));
+        }
+    }
+};
+
+module.exports = LoggerFormatter;
+
+},{}],7:[function(require,module,exports){
+var Logger = require('./LoggerLS');
+
+module.exports = Logger;
+
+},{"./LoggerLS":8}],8:[function(require,module,exports){
+var Config = require('./Config');
+var LogFormatter = require('./LogFormatter');
+
+var Logger = {
+    DEBUG_LEVEL: 3,
+    INFO_LEVEL: 2,
+    ERROR_LEVEL: 1,
+    NONE_LEVEL: 0,
+
+    keyName: 'log_ls_',
+    logLevel: 100,
+    deviceId: null,
+
+    setLogLevel: function(level) {
+        this.logLevel = level;
+    },
+    setDeviceId: function(id) {
+        this.deviceId = id;
+    },
+    logWrite: function(targetLevel, str, param) {
+        if(targetLevel > this.logLevel) return;
+        var ls = window.localStorage;
+        var key = this.keyName;
+        if(this.deviceId) key += this.deviceId + '_';
+        key += Date.now();
+
+        var loopFlag = true;
+        while(loopFlag) {
+            ls.getItem(key) ? key += 'a' : loopFlag = false;
+        }
+
+        var logData = {
+            log: str,
+            level: targetLevel,
+            time: Date.now()
+        };
+        if(param && typeof param.objName !== 'undefined') logData.obj = param.objName;
+        if(param && typeof param.objId !== 'undefined') logData.objId = param.objId;
+        ls.setItem(key, JSON.stringify(logData));
+        console.log(LogFormatter.formatLog(logData, this.deviceId));// original
+    },
+    debug: function(str, param) {
+        this.logWrite(this.DEBUG_LEVEL, str, param);
+    },
+    info: function(str, param) {
+        this.logWrite(this.INFO_LEVEL, str, param);
+    },
+    error: function(str, param) {
+        this.logWrite(this.ERROR_LEVEL, str, param);
+    },
+    show: function() {
+        var ls = window.localStorage;
+        for(var i = 0; i < ls.length; i++) {
+            var key = ls.key(i);
+            if(key.indexOf(this.keyName) === 0) {
+                var logData = JSON.parse(ls.getItem(key));
+                console.log(LogFormatter.formatLog(logData, this.deviceId));
+            }
+        }
+    },
+    getLogs: function(callback) {
+        setTimeout(function() {
+            var logs= [];
+            var ls = window.localStorage;
+            for(var i = 0; i < ls.length; i++) {
+                var key = ls.key(i);
+                if(key.indexOf(this.keyName) === 0) {
+                    var logData = JSON.parse(ls.getItem(key));
+                    logs.push(logData);
+                }
+            }
+            var logObj = {};
+            logObj.log = logs;
+            if(this.deviceId) logObj.deviceId = this.deviceId;
+            if(callback) callback(logObj);
+        }.bind(this), 0);
+    },
+    getLogsAsText: function(callback) {
+        setTimeout(function() {
+            var str = '';
+            var ls = window.localStorage;
+            console.log('Keys : ' + ls.length);
+            if(ls.remainingSpace) console.log('Remaining Space : ' + ls.remainingSpace);
+            for(var i = 0; i < ls.length; i++) {
+                var key = ls.key(i);
+                if(key.indexOf(this.keyName) === 0) {
+                    var logData = JSON.parse(ls.getItem(key));
+                    str += LogFormatter.formatLog(logData, this.deviceId) + '\n';
+                }
+            }
+            if(callback) callback(str);
+        }.bind(this), 0);
+    },
+    clear: function() {
+        var ls = window.localStorage;
+        for(var i = ls.length - 1; i > 0; i--) {
+            var key = ls.key(i);
+            if(key.indexOf(this.keyName) === 0) ls.removeItem(key);
+            console.log('Clear : Completed');
+        }
+    },
+}
+
+module.exports = Logger;
+
+},{"./Config":4,"./LogFormatter":6}],9:[function(require,module,exports){
+var Framework = require('../vendor/Framework');
+
+module.exports = Framework.ItemView.extend({
     template: '#header_view',
     initialize: function() {
         console.log('HeaderView', 'initialize', new Date());
     }
 });
 
-},{"backbone.marionette":12}],5:[function(require,module,exports){
+},{"../vendor/Framework":5}],10:[function(require,module,exports){
 var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.ItemView.extend({
@@ -116,7 +529,7 @@ module.exports = Marionette.ItemView.extend({
 });
 
 
-},{"backbone.marionette":12}],6:[function(require,module,exports){
+},{"backbone.marionette":17}],11:[function(require,module,exports){
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 
@@ -144,7 +557,7 @@ module.exports = Marionette.ItemView.extend({
     }
 });
 
-},{"backbone":"backbone","backbone.marionette":12}],7:[function(require,module,exports){
+},{"backbone":"backbone","backbone.marionette":17}],12:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -160,7 +573,7 @@ module.exports = Marionette.CompositeView.extend({
     }
 });
 
-},{"./BlogView":5,"backbone":"backbone","backbone.marionette":12,"jquery":"jquery","underscore":"underscore"}],8:[function(require,module,exports){
+},{"./BlogView":10,"backbone":"backbone","backbone.marionette":17,"jquery":"jquery","underscore":"underscore"}],13:[function(require,module,exports){
 var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.ItemView.extend({
@@ -170,7 +583,7 @@ module.exports = Marionette.ItemView.extend({
     }
 });
 
-},{"backbone.marionette":12}],9:[function(require,module,exports){
+},{"backbone.marionette":17}],14:[function(require,module,exports){
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 
@@ -198,7 +611,7 @@ module.exports = Marionette.ItemView.extend({
     }
 });
 
-},{"backbone":"backbone","backbone.marionette":12}],10:[function(require,module,exports){
+},{"backbone":"backbone","backbone.marionette":17}],15:[function(require,module,exports){
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var LikeView = require('./LikeView');
@@ -246,7 +659,7 @@ module.exports = Marionette.LayoutView.extend({
     }
 });
 
-},{"./LikeView":8,"backbone":"backbone","backbone.marionette":12}],11:[function(require,module,exports){
+},{"./LikeView":13,"backbone":"backbone","backbone.marionette":17}],16:[function(require,module,exports){
 // Backbone.BabySitter
 // -------------------
 // v0.1.11
@@ -438,7 +851,7 @@ module.exports = Marionette.LayoutView.extend({
 
 }));
 
-},{"backbone":"backbone","underscore":"underscore"}],12:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],17:[function(require,module,exports){
 // MarionetteJS (Backbone.Marionette)
 // ----------------------------------
 // v2.4.5
@@ -3949,7 +4362,7 @@ module.exports = Marionette.LayoutView.extend({
   return Marionette;
 }));
 
-},{"backbone":"backbone","backbone.babysitter":11,"backbone.wreqr":13,"underscore":"underscore"}],13:[function(require,module,exports){
+},{"backbone":"backbone","backbone.babysitter":16,"backbone.wreqr":18,"underscore":"underscore"}],18:[function(require,module,exports){
 // Backbone.Wreqr (Backbone.Marionette)
 // ----------------------------------
 // v1.3.6

@@ -1,7 +1,7 @@
-var Backbone = require('backbone');
+var Framework = require('../vendor/Framework');
 var Blog = require('../models/Blog');
 
-module.exports = Backbone.Collection.extend({
+module.exports = Framework.Collection.extend({
     model: Blog,
     url: 'http://localhost:3001/blogs',
     initialize: function() {

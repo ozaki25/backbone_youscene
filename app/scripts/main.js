@@ -1,7 +1,5 @@
-var $ = require('jquery');
-var _ = require('underscore');
-var Backbone = require('backbone');
-var Marionette = require('backbone.marionette');
+var Framework = require('./vendor/Framework');
+var Logger = require('./vendor/Logger');
 var Blog = require('./models/Blog');
 var Blogs = require('./collections/Blogs');
 var HeaderView = require('./views/HeaderView');
@@ -10,19 +8,7 @@ var NewView = require('./views/blogs/NewView');
 var EditView = require('./views/blogs/EditView');
 var ShowView = require('./views/blogs/ShowView');
 
-var App = new Marionette.Application({
-    regions: {
-        main: '#main',
-        header: '#header',
-        sideMenu: '#side_menu'
-    },
-    onStart: function() {
-        new appRouter();
-        Backbone.history.start();
-    }
-});
-
-var appRouter =  Marionette.AppRouter.extend({
+var appRouter =  Framework.AppRouter.extend({
     appRoutes: {
         ''               : 'index',
         'blogs'          : 'index',
@@ -63,5 +49,16 @@ var appRouter =  Marionette.AppRouter.extend({
     }
 });
 
-App.start();
+var App = new Framework.Application({
+    initialize: function(options) {
+        Logger.clear();
+    },
+    router: appRouter,
+    regions: {
+        main: '#main',
+        header: '#header',
+        sideMenu: '#side_menu'
+    }
+});
 
+App.start();

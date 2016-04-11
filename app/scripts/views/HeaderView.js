@@ -1,6 +1,6 @@
-var Marionette = require('backbone.marionette');
+var Framework = require('../vendor/Framework');
 
-module.exports = Marionette.ItemView.extend({
+module.exports = Framework.ItemView.extend({
     template: '#header_view',
     initialize: function() {
         console.log('HeaderView', 'initialize', new Date());

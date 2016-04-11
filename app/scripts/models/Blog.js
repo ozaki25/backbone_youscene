@@ -1,6 +1,6 @@
-var Backbone = require('backbone');
+var Framework = require('../vendor/Framework');
 
-module.exports = Backbone.Model.extend({
+module.exports = Framework.Model.extend({
     urlRoot: 'http://localhost:3001/blogs',
     defaults: function() {
         return {
