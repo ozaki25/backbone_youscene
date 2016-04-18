@@ -17,30 +17,25 @@ var appRouter =  Framework.AppRouter.extend({
         'blogs/:id'      : 'show'
     },
     initialize: function() {
-        console.log('Rotuer', 'initialize', new Date());
         App.getRegion('header').show(new HeaderView());
     },
     controller: {
         index : function index() {
-            console.log('Rotuer', 'index', new Date());
             var blogs = new Blogs();
             blogs.fetch().done(function() {
                 App.getRegion('main').show(new IndexView({collection: blogs}));
             });
         },
         newBlog : function newBlog() {
-            console.log('Router', 'newBlog', new Date());
             App.getRegion('main').show(new NewView({collection: new Blogs()}));
         },
         edit : function edit(id) {
-            console.log('Router', 'edit', new Date());
             var blog = new Blog({id: id});
             blog.fetch().done(function() {
                 App.getRegion('main').show(new EditView({model: blog}));
             });
         },
         show : function show(id) {
-            console.log('Router', 'show', new Date());
             var blog = new Blog({id: id});
             blog.fetch().done(function() {
                 App.getRegion('main').show(new ShowView({model: blog}))

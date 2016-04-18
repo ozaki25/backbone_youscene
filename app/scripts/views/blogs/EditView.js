@@ -11,11 +11,7 @@ module.exports = Marionette.ItemView.extend({
     events: {
         'click #update_blog': 'update'
     },
-    initialize: function() {
-        console.log('EditView', 'initialize', new Date());
-    },
     update: function() {
-        console.log('EditView', 'update', new Date());
         this.model.save({
             title: this.ui.title.val(),
             author: this.ui.author.val(),

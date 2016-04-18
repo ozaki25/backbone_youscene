@@ -11,11 +11,7 @@ module.exports = Marionette.ItemView.extend({
     events: {
         'click #create_blog': 'create'
     },
-    initialize: function() {
-        console.log('New', 'initialize', new Date());
-    },
     create: function() {
-        console.log('New', 'create', new Date());
         this.collection.create({
             title: this.ui.title.val(),
             author: this.ui.author.val(),

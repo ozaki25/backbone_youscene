@@ -5,9 +5,6 @@ var Blog = require('../models/Blog');
 module.exports = Framework.Collection.extend({
     model: Blog,
     url: 'http://localhost:3001/blogs',
-    initialize: function() {
-        console.log('Blogs', 'initialize', new Date());
-    }
 });
 
 },{"../models/Blog":3,"../vendor/Framework":5}],2:[function(require,module,exports){
@@ -30,30 +27,25 @@ var appRouter =  Framework.AppRouter.extend({
         'blogs/:id'      : 'show'
     },
     initialize: function() {
-        console.log('Rotuer', 'initialize', new Date());
         App.getRegion('header').show(new HeaderView());
     },
     controller: {
         index : function index() {
-            console.log('Rotuer', 'index', new Date());
             var blogs = new Blogs();
             blogs.fetch().done(function() {
                 App.getRegion('main').show(new IndexView({collection: blogs}));
             });
         },
         newBlog : function newBlog() {
-            console.log('Router', 'newBlog', new Date());
             App.getRegion('main').show(new NewView({collection: new Blogs()}));
         },
         edit : function edit(id) {
-            console.log('Router', 'edit', new Date());
             var blog = new Blog({id: id});
             blog.fetch().done(function() {
                 App.getRegion('main').show(new EditView({model: blog}));
             });
         },
         show : function show(id) {
-            console.log('Router', 'show', new Date());
             var blog = new Blog({id: id});
             blog.fetch().done(function() {
                 App.getRegion('main').show(new ShowView({model: blog}))
@@ -512,9 +504,6 @@ var Framework = require('../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
     template: '#header_view',
-    initialize: function() {
-        console.log('HeaderView', 'initialize', new Date());
-    }
 });
 
 },{"../vendor/Framework":5}],10:[function(require,module,exports){
@@ -523,9 +512,6 @@ var Marionette = require('backbone.marionette');
 module.exports = Marionette.ItemView.extend({
     tagName:  'div',
     template: '#blog_view',
-    initialize: function() {
-        console.log('BlogView', 'initialize', new Date());
-    },
 });
 
 
@@ -543,11 +529,7 @@ module.exports = Marionette.ItemView.extend({
     events: {
         'click #update_blog': 'update'
     },
-    initialize: function() {
-        console.log('EditView', 'initialize', new Date());
-    },
     update: function() {
-        console.log('EditView', 'update', new Date());
         this.model.save({
             title: this.ui.title.val(),
             author: this.ui.author.val(),
@@ -568,9 +550,6 @@ module.exports = Marionette.CompositeView.extend({
     template: '#index_view',
     childView: BlogView,
     childViewContainer: '#blog_list',
-    initialize: function() {
-        console.log('IndexView', 'initialize', new Date());
-    }
 });
 
 },{"./BlogView":10,"backbone":"backbone","backbone.marionette":17,"jquery":"jquery","underscore":"underscore"}],13:[function(require,module,exports){
@@ -578,9 +557,6 @@ var Marionette = require('backbone.marionette');
 
 module.exports = Marionette.ItemView.extend({
     template: '#like_view',
-    initialize: function() {
-        console.log('LikeView', 'initialize', new Date());
-    }
 });
 
 },{"backbone.marionette":17}],14:[function(require,module,exports){
@@ -597,11 +573,7 @@ module.exports = Marionette.ItemView.extend({
     events: {
         'click #create_blog': 'create'
     },
-    initialize: function() {
-        console.log('New', 'initialize', new Date());
-    },
     create: function() {
-        console.log('New', 'create', new Date());
         this.collection.create({
             title: this.ui.title.val(),
             author: this.ui.author.val(),
@@ -631,19 +603,13 @@ module.exports = Marionette.LayoutView.extend({
         'click @ui.destroy': 'destroyBlog',
         'click @ui.like': 'addLike'
     },
-    initialize: function() {
-        console.log('ShowView', 'initialize', new Date());
-    },
     onRender: function() {
-        console.log('ShowView', 'onRender', new Date());
         this.getRegion('like').show(new LikeView({model: this.model}))
     },
     edit: function() {
-        console.log('ShowView', 'edit', new Date());
         Backbone.history.navigate('/blogs/' + this.model.get('id') + '/edit', {trigger: true});
     },
     destroyBlog: function() {
-        console.log('ShowView', 'destroy', new Date());
         var isDestroy = confirm('削除してよろしいですか。');
         if(isDestroy) {
             this.model.destroy();
@@ -653,7 +619,6 @@ module.exports = Marionette.LayoutView.extend({
         }
     },
     addLike: function() {
-        console.log('ShowView', 'addLike', new Date());
         this.model.save({likes: this.model.get('likes') + 1});
         this.getRegion('like').show(new LikeView({model: this.model}))
     }
