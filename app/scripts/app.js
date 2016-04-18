@@ -84,7 +84,7 @@ module.exports = Framework.Model.extend({
 });
 
 },{"../vendor/Framework":5}],4:[function(require,module,exports){
-var Config = {logLevel: 2}
+var Config = {logLevel: 3}
 
 module.exports = Config;
 
@@ -507,19 +507,19 @@ module.exports = Framework.ItemView.extend({
 });
 
 },{"../vendor/Framework":5}],10:[function(require,module,exports){
-var Marionette = require('backbone.marionette');
+var Framework = require('../../vendor/Framework');
 
-module.exports = Marionette.ItemView.extend({
+module.exports = Framework.ItemView.extend({
     tagName:  'div',
     template: '#blog_view',
 });
 
 
-},{"backbone.marionette":17}],11:[function(require,module,exports){
+},{"../../vendor/Framework":5}],11:[function(require,module,exports){
 var Backbone = require('backbone');
-var Marionette = require('backbone.marionette');
+var Framework = require('../../vendor/Framework');
 
-module.exports = Marionette.ItemView.extend({
+module.exports = Framework.ItemView.extend({
     template: '#edit_view',
     ui: {
         title: 'input#title',
@@ -539,31 +539,31 @@ module.exports = Marionette.ItemView.extend({
     }
 });
 
-},{"backbone":"backbone","backbone.marionette":17}],12:[function(require,module,exports){
+},{"../../vendor/Framework":5,"backbone":"backbone"}],12:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var Marionette = require('backbone.marionette');
+var Framework = require('../../vendor/Framework');
 var BlogView = require('./BlogView');
 
-module.exports = Marionette.CompositeView.extend({
+module.exports = Framework.CompositeView.extend({
     template: '#index_view',
     childView: BlogView,
     childViewContainer: '#blog_list',
 });
 
-},{"./BlogView":10,"backbone":"backbone","backbone.marionette":17,"jquery":"jquery","underscore":"underscore"}],13:[function(require,module,exports){
-var Marionette = require('backbone.marionette');
+},{"../../vendor/Framework":5,"./BlogView":10,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],13:[function(require,module,exports){
+var Framework = require('../../vendor/Framework');
 
-module.exports = Marionette.ItemView.extend({
+module.exports = Framework.ItemView.extend({
     template: '#like_view',
 });
 
-},{"backbone.marionette":17}],14:[function(require,module,exports){
+},{"../../vendor/Framework":5}],14:[function(require,module,exports){
 var Backbone = require('backbone');
-var Marionette = require('backbone.marionette');
+var Framework = require('../../vendor/Framework');
 
-module.exports = Marionette.ItemView.extend({
+module.exports = Framework.ItemView.extend({
     template: '#new_view',
     ui: {
         title: 'input#title',
@@ -583,12 +583,12 @@ module.exports = Marionette.ItemView.extend({
     }
 });
 
-},{"backbone":"backbone","backbone.marionette":17}],15:[function(require,module,exports){
+},{"../../vendor/Framework":5,"backbone":"backbone"}],15:[function(require,module,exports){
 var Backbone = require('backbone');
-var Marionette = require('backbone.marionette');
+var Framework = require('../../vendor/Framework');
 var LikeView = require('./LikeView');
 
-module.exports = Marionette.LayoutView.extend({
+module.exports = Framework.LayoutView.extend({
     template: '#show_view',
     ui: {
         edit: '#edit_blog',
@@ -624,7 +624,7 @@ module.exports = Marionette.LayoutView.extend({
     }
 });
 
-},{"./LikeView":13,"backbone":"backbone","backbone.marionette":17}],16:[function(require,module,exports){
+},{"../../vendor/Framework":5,"./LikeView":13,"backbone":"backbone"}],16:[function(require,module,exports){
 // Backbone.BabySitter
 // -------------------
 // v0.1.11

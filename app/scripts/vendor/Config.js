@@ -1,3 +1,3 @@
-var Config = {logLevel: 2}
+var Config = {logLevel: 3}
 
 module.exports = Config;

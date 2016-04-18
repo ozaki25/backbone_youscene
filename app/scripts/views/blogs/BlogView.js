@@ -1,6 +1,6 @@
-var Marionette = require('backbone.marionette');
+var Framework = require('../../vendor/Framework');
 
-module.exports = Marionette.ItemView.extend({
+module.exports = Framework.ItemView.extend({
     tagName:  'div',
     template: '#blog_view',
 });

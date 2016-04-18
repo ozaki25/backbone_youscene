@@ -1,8 +1,8 @@
 var Backbone = require('backbone');
-var Marionette = require('backbone.marionette');
+var Framework = require('../../vendor/Framework');
 var LikeView = require('./LikeView');
 
-module.exports = Marionette.LayoutView.extend({
+module.exports = Framework.LayoutView.extend({
     template: '#show_view',
     ui: {
         edit: '#edit_blog',
