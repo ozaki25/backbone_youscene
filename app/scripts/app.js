@@ -3,6 +3,7 @@ var Framework = require('../vendor/Framework');
 var Blog = require('../models/Blog');
 
 module.exports = Framework.Collection.extend({
+    moduleName: 'BlogsCollection',
     model: Blog,
     url: 'http://localhost:3001/blogs',
 });
@@ -72,6 +73,7 @@ App.start();
 var Framework = require('../vendor/Framework');
 
 module.exports = Framework.Model.extend({
+    moduleName: 'BlogModel',
     urlRoot: 'http://localhost:3001/blogs',
     defaults: function() {
         return {
@@ -503,6 +505,7 @@ module.exports = Logger;
 var Framework = require('../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
+    moduleName: 'HeaderView',
     template: '#header_view',
 });
 
@@ -510,6 +513,7 @@ module.exports = Framework.ItemView.extend({
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
+    moduleName: 'BlogView',
     tagName:  'div',
     template: '#blog_view',
 });
@@ -520,6 +524,7 @@ var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
+    moduleName: 'EditView',
     template: '#edit_view',
     ui: {
         title: 'input#title',
@@ -547,6 +552,7 @@ var Framework = require('../../vendor/Framework');
 var BlogView = require('./BlogView');
 
 module.exports = Framework.CompositeView.extend({
+    moduleName: 'IndexView',
     template: '#index_view',
     childView: BlogView,
     childViewContainer: '#blog_list',
@@ -556,6 +562,7 @@ module.exports = Framework.CompositeView.extend({
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
+    moduleName: 'LikeView',
     template: '#like_view',
 });
 
@@ -564,6 +571,7 @@ var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
+    moduleName: 'NewView',
     template: '#new_view',
     ui: {
         title: 'input#title',
@@ -589,6 +597,7 @@ var Framework = require('../../vendor/Framework');
 var LikeView = require('./LikeView');
 
 module.exports = Framework.LayoutView.extend({
+    moduleName: 'ShowView',
     template: '#show_view',
     ui: {
         edit: '#edit_blog',

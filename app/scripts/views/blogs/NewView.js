@@ -2,6 +2,7 @@ var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
+    moduleName: 'NewView',
     template: '#new_view',
     ui: {
         title: 'input#title',
