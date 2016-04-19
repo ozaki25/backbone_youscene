@@ -664,11 +664,7 @@ module.exports = Framework.LayoutView.extend({
         'click @ui.like': 'addLike'
     },
     onRender: function() {
-        var comments = new Comments()
-        comments.fetch().done(function() {
-            filterComments = comments.where({blog_id: this.model.id})
-            this.getRegion('comment').show(new CommentIndexView({collection: new Comments(filterComments)}))
-        }.bind(this));
+        this.getRegion('comment').show(new CommentIndexView({collection: new Comments(this.model.get('comments'))}));
         this.getRegion('like').show(new LikeView({model: this.model}))
     },
     edit: function() {
