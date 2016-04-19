@@ -1,7 +1,6 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: %i(show update destroy)
 
-  # GET /blogs
   # GET /blogs.json
   def index
     @blogs = Blog.all
