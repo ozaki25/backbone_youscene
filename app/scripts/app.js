@@ -566,6 +566,9 @@ var Framework = require('../../vendor/Framework');
 module.exports = Framework.ItemView.extend({
     moduleName: 'LikeView',
     template: '#like_view',
+    modelEvents: {
+        "change:likes": 'render'
+    }
 });
 
 },{"../../vendor/Framework":5}],14:[function(require,module,exports){
@@ -632,7 +635,6 @@ module.exports = Framework.LayoutView.extend({
     },
     addLike: function() {
         this.model.save({likes: this.model.get('likes') + 1});
-        this.getRegion('like').show(new LikeView({model: this.model}))
     }
 });
 

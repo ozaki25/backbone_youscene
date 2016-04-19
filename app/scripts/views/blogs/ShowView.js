@@ -36,6 +36,5 @@ module.exports = Framework.LayoutView.extend({
     },
     addLike: function() {
         this.model.save({likes: this.model.get('likes') + 1});
-        this.getRegion('like').show(new LikeView({model: this.model}))
     }
 });
