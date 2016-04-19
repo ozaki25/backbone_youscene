@@ -8,5 +8,5 @@ module.exports = Framework.CompositeView.extend({
     moduleName: 'IndexView',
     template: '#index_view',
     childView: BlogView,
-    childViewContainer: '#blog_list',
+    childViewContainer: '#blog_list'
 });

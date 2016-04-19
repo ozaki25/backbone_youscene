@@ -27,8 +27,9 @@ module.exports = Framework.LayoutView.extend({
     destroyBlog: function() {
         var isDestroy = confirm('削除してよろしいですか。');
         if(isDestroy) {
-            this.model.destroy();
-            Backbone.history.navigate('', {trigger: true});
+            this.model.destroy().done(function() {
+                Backbone.history.navigate('', {trigger: true});
+            });
         } else {
             return;
         }

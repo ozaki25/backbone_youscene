@@ -19,6 +19,8 @@ var NewView = require('./views/blogs/NewView');
 var EditView = require('./views/blogs/EditView');
 var ShowView = require('./views/blogs/ShowView');
 
+var blogs = new Blogs();
+
 var appRouter =  Framework.AppRouter.extend({
     appRoutes: {
         ''               : 'index',
@@ -32,13 +34,12 @@ var appRouter =  Framework.AppRouter.extend({
     },
     controller: {
         index : function index() {
-            var blogs = new Blogs();
             blogs.fetch().done(function() {
                 App.getRegion('main').show(new IndexView({collection: blogs}));
             });
         },
         newBlog : function newBlog() {
-            App.getRegion('main').show(new NewView({collection: new Blogs()}));
+            App.getRegion('main').show(new NewView({collection: blogs}));
         },
         edit : function edit(id) {
             var blog = new Blog({id: id});
@@ -86,7 +87,7 @@ module.exports = Framework.Model.extend({
 });
 
 },{"../vendor/Framework":5}],4:[function(require,module,exports){
-var Config = {logLevel: 3}
+var Config = {logLevel: 2}
 
 module.exports = Config;
 
@@ -515,7 +516,7 @@ var Framework = require('../../vendor/Framework');
 module.exports = Framework.ItemView.extend({
     moduleName: 'BlogView',
     tagName:  'div',
-    template: '#blog_view',
+    template: '#blog_view'
 });
 
 
@@ -539,8 +540,9 @@ module.exports = Framework.ItemView.extend({
             title: this.ui.title.val(),
             author: this.ui.author.val(),
             content: this.ui.content.val()
+        }).done(function() {
+            Backbone.history.navigate('', {trigger:true});
         });
-        Backbone.history.navigate('', {trigger:true});
     }
 });
 
@@ -555,7 +557,7 @@ module.exports = Framework.CompositeView.extend({
     moduleName: 'IndexView',
     template: '#index_view',
     childView: BlogView,
-    childViewContainer: '#blog_list',
+    childViewContainer: '#blog_list'
 });
 
 },{"../../vendor/Framework":5,"./BlogView":10,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],13:[function(require,module,exports){
@@ -586,7 +588,7 @@ module.exports = Framework.ItemView.extend({
             title: this.ui.title.val(),
             author: this.ui.author.val(),
             content: this.ui.content.val()
-        });
+        }, {wait : true});
         Backbone.history.navigate('', {trigger:true});
     }
 });
@@ -621,8 +623,9 @@ module.exports = Framework.LayoutView.extend({
     destroyBlog: function() {
         var isDestroy = confirm('削除してよろしいですか。');
         if(isDestroy) {
-            this.model.destroy();
-            Backbone.history.navigate('', {trigger: true});
+            this.model.destroy().done(function() {
+                Backbone.history.navigate('', {trigger: true});
+            });
         } else {
             return;
         }
@@ -6234,6 +6237,7 @@ module.exports = Framework.LayoutView.extend({
   // Set the default implementation of `Backbone.ajax` to proxy through to `$`.
   // Override this if you'd like to use a different library.
   Backbone.ajax = function() {
+    console.log(arguments[0].type, arguments[0].url, new Date()); // original
     return Backbone.$.ajax.apply(Backbone.$, arguments);
   };
 

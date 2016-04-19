@@ -17,7 +17,8 @@ module.exports = Framework.ItemView.extend({
             title: this.ui.title.val(),
             author: this.ui.author.val(),
             content: this.ui.content.val()
+        }).done(function() {
+            Backbone.history.navigate('', {trigger:true});
         });
-        Backbone.history.navigate('', {trigger:true});
     }
 });

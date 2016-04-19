@@ -8,6 +8,8 @@ var NewView = require('./views/blogs/NewView');
 var EditView = require('./views/blogs/EditView');
 var ShowView = require('./views/blogs/ShowView');
 
+var blogs = new Blogs();
+
 var appRouter =  Framework.AppRouter.extend({
     appRoutes: {
         ''               : 'index',
@@ -21,13 +23,12 @@ var appRouter =  Framework.AppRouter.extend({
     },
     controller: {
         index : function index() {
-            var blogs = new Blogs();
             blogs.fetch().done(function() {
                 App.getRegion('main').show(new IndexView({collection: blogs}));
             });
         },
         newBlog : function newBlog() {
-            App.getRegion('main').show(new NewView({collection: new Blogs()}));
+            App.getRegion('main').show(new NewView({collection: blogs}));
         },
         edit : function edit(id) {
             var blog = new Blog({id: id});
