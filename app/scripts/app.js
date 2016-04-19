@@ -503,24 +503,53 @@ var Logger = {
 module.exports = Logger;
 
 },{"./Config":4,"./LogFormatter":6}],9:[function(require,module,exports){
+var Backbone = require('backbone');
 var Framework = require('../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
     moduleName: 'HeaderView',
     template: '#header_view',
+    ui: {
+        indexBlogLink: '#top_link',
+        newBlogLink: '#new_blog_link'
+    },
+    events: {
+        'click @ui.indexBlogLink': 'indexBlog',
+        'click @ui.newBlogLink': 'newBlog'
+    },
+    indexBlog: function(e) {
+        e.preventDefault();
+        Backbone.history.navigate('', {trigger: true});
+    },
+    newBlog: function(e) {
+        e.preventDefault();
+        Backbone.history.navigate('/blogs/new', {trigger: true});
+    }
 });
 
-},{"../vendor/Framework":5}],10:[function(require,module,exports){
+},{"../vendor/Framework":5,"backbone":"backbone"}],10:[function(require,module,exports){
+var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
     moduleName: 'BlogView',
     tagName:  'div',
-    template: '#blog_view'
+    template: '#blog_view',
+    ui: {
+        title: '.title'
+    },
+    events: {
+        'click @ui.title': 'show'
+    },
+    show: function(e) {
+        e.preventDefault();
+        var id = this.ui.title.attr('id');
+        Backbone.history.navigate('/blogs/' + id, {trigger: true});
+    }
 });
 
 
-},{"../../vendor/Framework":5}],11:[function(require,module,exports){
+},{"../../vendor/Framework":5,"backbone":"backbone"}],11:[function(require,module,exports){
 var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
@@ -547,9 +576,6 @@ module.exports = Framework.ItemView.extend({
 });
 
 },{"../../vendor/Framework":5,"backbone":"backbone"}],12:[function(require,module,exports){
-var $ = require('jquery');
-var _ = require('underscore');
-var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 var BlogView = require('./BlogView');
 
@@ -560,7 +586,7 @@ module.exports = Framework.CompositeView.extend({
     childViewContainer: '#blog_list'
 });
 
-},{"../../vendor/Framework":5,"./BlogView":10,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],13:[function(require,module,exports){
+},{"../../vendor/Framework":5,"./BlogView":10}],13:[function(require,module,exports){
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({

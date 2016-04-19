@@ -25,12 +25,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a href="/#" class="navbar-brand">youScene</a>
+              <a href="#" class="navbar-brand" id="top_link">youScene</a>
             </div>
             <div class="collapse navbar-collapse">
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/#blogs/new">New Blog</a></li>
-                <li><a href="#">Test User</a></li>
+                <li><a href="#" id="new_blog_link">New Blog</a></li>
+                <li><a>Test User</a></li>
               </ul>
             </div>
           </div>
@@ -44,7 +44,7 @@
       <script id="blog_view" type="text/template">
         <div class="index-blog">
           <div class="index-title">
-            <a href="/#blogs/<%- id %>">
+            <a href="#" id="<%- id %>" class="title">
               <%- title %>
             </a>
           </div>
