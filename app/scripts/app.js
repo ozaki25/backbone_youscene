@@ -60,7 +60,6 @@ var appRouter =  Framework.AppRouter.extend({
         },
         show : function show(id) {
             var blog = new Blog({id: id});
-            var comments = new Comments();
             blog.fetch().done(function() {
                 App.getRegion('main').show(new ShowView({model: blog}))
             });
