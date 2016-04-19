@@ -2,6 +2,7 @@ var Framework = require('./vendor/Framework');
 var Logger = require('./vendor/Logger');
 var Blog = require('./models/Blog');
 var Blogs = require('./collections/Blogs');
+var Comments = require('./collections/Comments');
 var HeaderView = require('./views/HeaderView');
 var IndexView = require('./views/blogs/IndexView');
 var NewView = require('./views/blogs/NewView');

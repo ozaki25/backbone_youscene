@@ -1,6 +1,9 @@
 var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
+var Comments = require('../../collections/Comments');
 var LikeView = require('./LikeView');
+var CommentIndexView = require('../comments/IndexView');
+
 
 module.exports = Framework.LayoutView.extend({
     moduleName: 'blogs/ShowView',
@@ -11,6 +14,7 @@ module.exports = Framework.LayoutView.extend({
         like: '#like_btn'
     },
     regions: {
+        comment: '#comment_list',
         like: '#like_count'
     },
     events: {
@@ -19,6 +23,11 @@ module.exports = Framework.LayoutView.extend({
         'click @ui.like': 'addLike'
     },
     onRender: function() {
+        var comments = new Comments()
+        comments.fetch().done(function() {
+            filterComments = comments.where({blog_id: this.model.id})
+            this.getRegion('comment').show(new CommentIndexView({collection: new Comments(filterComments)}))
+        }.bind(this));
         this.getRegion('like').show(new LikeView({model: this.model}))
     },
     edit: function() {

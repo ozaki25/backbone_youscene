@@ -8,11 +8,22 @@ module.exports = Framework.Collection.extend({
     url: 'http://localhost:3001/blogs',
 });
 
-},{"../models/Blog":3,"../vendor/Framework":5}],2:[function(require,module,exports){
+},{"../models/Blog":4,"../vendor/Framework":7}],2:[function(require,module,exports){
+var Framework = require('../vendor/Framework');
+var Comment = require('../models/Comment');
+
+module.exports = Framework.Collection.extend({
+    moduleName: 'CommentCollection',
+    model: Comment,
+    url: 'http://localhost:3001/comments'
+});
+
+},{"../models/Comment":5,"../vendor/Framework":7}],3:[function(require,module,exports){
 var Framework = require('./vendor/Framework');
 var Logger = require('./vendor/Logger');
 var Blog = require('./models/Blog');
 var Blogs = require('./collections/Blogs');
+var Comments = require('./collections/Comments');
 var HeaderView = require('./views/HeaderView');
 var IndexView = require('./views/blogs/IndexView');
 var NewView = require('./views/blogs/NewView');
@@ -49,6 +60,7 @@ var appRouter =  Framework.AppRouter.extend({
         },
         show : function show(id) {
             var blog = new Blog({id: id});
+            var comments = new Comments();
             blog.fetch().done(function() {
                 App.getRegion('main').show(new ShowView({model: blog}))
             });
@@ -70,7 +82,7 @@ var App = new Framework.Application({
 
 App.start();
 
-},{"./collections/Blogs":1,"./models/Blog":3,"./vendor/Framework":5,"./vendor/Logger":7,"./views/HeaderView":9,"./views/blogs/EditView":11,"./views/blogs/IndexView":12,"./views/blogs/NewView":14,"./views/blogs/ShowView":15}],3:[function(require,module,exports){
+},{"./collections/Blogs":1,"./collections/Comments":2,"./models/Blog":4,"./vendor/Framework":7,"./vendor/Logger":9,"./views/HeaderView":11,"./views/blogs/EditView":13,"./views/blogs/IndexView":14,"./views/blogs/NewView":16,"./views/blogs/ShowView":17}],4:[function(require,module,exports){
 var Framework = require('../vendor/Framework');
 
 module.exports = Framework.Model.extend({
@@ -78,20 +90,25 @@ module.exports = Framework.Model.extend({
     urlRoot: 'http://localhost:3001/blogs',
     defaults: function() {
         return {
-            title: 'タイトル',
-            content: '内容',
-            author: 'テストユーザ',
             likes: 0
         };
     }
 });
 
-},{"../vendor/Framework":5}],4:[function(require,module,exports){
+},{"../vendor/Framework":7}],5:[function(require,module,exports){
+var Framework = require('../vendor/Framework');
+
+module.exports = Framework.Model.extend({
+    moduleName: 'CommentModel',
+    urlRoot: 'http://localhost:3001/comments'
+});
+
+},{"../vendor/Framework":7}],6:[function(require,module,exports){
 var Config = {logLevel: 2}
 
 module.exports = Config;
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -332,7 +349,7 @@ module.exports = (function() {
     }
 })();
 
-},{"./Config":4,"./Logger":7,"backbone":"backbone","backbone.marionette":17,"jquery":"jquery","underscore":"underscore"}],6:[function(require,module,exports){
+},{"./Config":6,"./Logger":9,"backbone":"backbone","backbone.marionette":21,"jquery":"jquery","underscore":"underscore"}],8:[function(require,module,exports){
 var LoggerFormatter = {
     DEBUG_LEVEL: 3,
     INFO_LEVEL: 2,
@@ -391,12 +408,12 @@ var LoggerFormatter = {
 
 module.exports = LoggerFormatter;
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var Logger = require('./LoggerLS');
 
 module.exports = Logger;
 
-},{"./LoggerLS":8}],8:[function(require,module,exports){
+},{"./LoggerLS":10}],10:[function(require,module,exports){
 var Config = require('./Config');
 var LogFormatter = require('./LogFormatter');
 
@@ -502,7 +519,7 @@ var Logger = {
 
 module.exports = Logger;
 
-},{"./Config":4,"./LogFormatter":6}],9:[function(require,module,exports){
+},{"./Config":6,"./LogFormatter":8}],11:[function(require,module,exports){
 var Backbone = require('backbone');
 var Framework = require('../vendor/Framework');
 
@@ -527,7 +544,7 @@ module.exports = Framework.ItemView.extend({
     }
 });
 
-},{"../vendor/Framework":5,"backbone":"backbone"}],10:[function(require,module,exports){
+},{"../vendor/Framework":7,"backbone":"backbone"}],12:[function(require,module,exports){
 var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
@@ -549,7 +566,7 @@ module.exports = Framework.ItemView.extend({
 });
 
 
-},{"../../vendor/Framework":5,"backbone":"backbone"}],11:[function(require,module,exports){
+},{"../../vendor/Framework":7,"backbone":"backbone"}],13:[function(require,module,exports){
 var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
@@ -575,7 +592,7 @@ module.exports = Framework.ItemView.extend({
     }
 });
 
-},{"../../vendor/Framework":5,"backbone":"backbone"}],12:[function(require,module,exports){
+},{"../../vendor/Framework":7,"backbone":"backbone"}],14:[function(require,module,exports){
 var Framework = require('../../vendor/Framework');
 var BlogView = require('./BlogView');
 
@@ -586,7 +603,7 @@ module.exports = Framework.CompositeView.extend({
     childViewContainer: '#blog_list'
 });
 
-},{"../../vendor/Framework":5,"./BlogView":10}],13:[function(require,module,exports){
+},{"../../vendor/Framework":7,"./BlogView":12}],15:[function(require,module,exports){
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
@@ -597,7 +614,7 @@ module.exports = Framework.ItemView.extend({
     }
 });
 
-},{"../../vendor/Framework":5}],14:[function(require,module,exports){
+},{"../../vendor/Framework":7}],16:[function(require,module,exports){
 var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
@@ -622,10 +639,13 @@ module.exports = Framework.ItemView.extend({
     }
 });
 
-},{"../../vendor/Framework":5,"backbone":"backbone"}],15:[function(require,module,exports){
+},{"../../vendor/Framework":7,"backbone":"backbone"}],17:[function(require,module,exports){
 var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
+var Comments = require('../../collections/Comments');
 var LikeView = require('./LikeView');
+var CommentIndexView = require('../comments/IndexView');
+
 
 module.exports = Framework.LayoutView.extend({
     moduleName: 'blogs/ShowView',
@@ -636,6 +656,7 @@ module.exports = Framework.LayoutView.extend({
         like: '#like_btn'
     },
     regions: {
+        comment: '#comment_list',
         like: '#like_count'
     },
     events: {
@@ -644,6 +665,11 @@ module.exports = Framework.LayoutView.extend({
         'click @ui.like': 'addLike'
     },
     onRender: function() {
+        var comments = new Comments()
+        comments.fetch().done(function() {
+            filterComments = comments.where({blog_id: this.model.id})
+            this.getRegion('comment').show(new CommentIndexView({collection: new Comments(filterComments)}))
+        }.bind(this));
         this.getRegion('like').show(new LikeView({model: this.model}))
     },
     edit: function() {
@@ -664,7 +690,28 @@ module.exports = Framework.LayoutView.extend({
     }
 });
 
-},{"../../vendor/Framework":5,"./LikeView":13,"backbone":"backbone"}],16:[function(require,module,exports){
+},{"../../collections/Comments":2,"../../vendor/Framework":7,"../comments/IndexView":19,"./LikeView":15,"backbone":"backbone"}],18:[function(require,module,exports){
+var Backbone = require('backbone');
+var Framework = require('../../vendor/Framework');
+
+module.exports = Framework.ItemView.extend({
+    moduleName: 'comment/CommentView',
+    tagName:  'div',
+    template: '#comment_view'
+});
+
+
+},{"../../vendor/Framework":7,"backbone":"backbone"}],19:[function(require,module,exports){
+var Framework = require('../../vendor/Framework');
+var CommentView = require('./CommentView');
+
+module.exports = Framework.CollectionView.extend({
+    moduleName: 'comment/IndexView',
+    childView: CommentView,
+    childViewContainer: '#comment_list'
+});
+
+},{"../../vendor/Framework":7,"./CommentView":18}],20:[function(require,module,exports){
 // Backbone.BabySitter
 // -------------------
 // v0.1.11
@@ -856,7 +903,7 @@ module.exports = Framework.LayoutView.extend({
 
 }));
 
-},{"backbone":"backbone","underscore":"underscore"}],17:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],21:[function(require,module,exports){
 // MarionetteJS (Backbone.Marionette)
 // ----------------------------------
 // v2.4.5
@@ -4367,7 +4414,7 @@ module.exports = Framework.LayoutView.extend({
   return Marionette;
 }));
 
-},{"backbone":"backbone","backbone.babysitter":16,"backbone.wreqr":18,"underscore":"underscore"}],18:[function(require,module,exports){
+},{"backbone":"backbone","backbone.babysitter":20,"backbone.wreqr":22,"underscore":"underscore"}],22:[function(require,module,exports){
 // Backbone.Wreqr (Backbone.Marionette)
 // ----------------------------------
 // v1.3.6
@@ -18123,4 +18170,4 @@ return jQuery;
   }
 }.call(this));
 
-},{}]},{},[2]);
+},{}]},{},[3]);

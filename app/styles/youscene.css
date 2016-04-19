@@ -90,7 +90,7 @@ a:focus {
 }
 
 .show-blog {
-   margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .show-blog-title {
@@ -102,10 +102,10 @@ a:focus {
 
 .index-blog-info,
 .show-blog-info {
-   margin-bottom: 0;
+  margin-bottom: 0;
 }
 
-.show-blog-article {
+.show-blog-content {
   background-color: #fffff0;
   border: none;
   border-radius: 0px;
@@ -113,3 +113,13 @@ a:focus {
   border-bottom:solid 1px;
 }
 
+.comments {
+  margin: 20px 25px;
+}
+
+.show-comment-content {
+  background-color: inherit;
+  border: none;
+  padding: 5px;
+  margin: 0;
+}
