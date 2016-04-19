@@ -532,7 +532,7 @@ var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
-    moduleName: 'BlogView',
+    moduleName: 'blogs/BlogView',
     tagName:  'div',
     template: '#blog_view',
     ui: {
@@ -554,8 +554,8 @@ var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
-    moduleName: 'EditView',
-    template: '#edit_view',
+    moduleName: 'blogs/EditView',
+    template: '#edit_blog_view',
     ui: {
         title: 'input#title',
         author: 'input#author',
@@ -580,8 +580,8 @@ var Framework = require('../../vendor/Framework');
 var BlogView = require('./BlogView');
 
 module.exports = Framework.CompositeView.extend({
-    moduleName: 'IndexView',
-    template: '#index_view',
+    moduleName: 'blogs/IndexView',
+    template: '#index_blog_view',
     childView: BlogView,
     childViewContainer: '#blog_list'
 });
@@ -590,7 +590,7 @@ module.exports = Framework.CompositeView.extend({
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
-    moduleName: 'LikeView',
+    moduleName: 'blogs/LikeView',
     template: '#like_view',
     modelEvents: {
         "change:likes": 'render'
@@ -602,8 +602,8 @@ var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
-    moduleName: 'NewView',
-    template: '#new_view',
+    moduleName: 'blogs/NewView',
+    template: '#new_blog_view',
     ui: {
         title: 'input#title',
         author: 'input#author',
@@ -628,8 +628,8 @@ var Framework = require('../../vendor/Framework');
 var LikeView = require('./LikeView');
 
 module.exports = Framework.LayoutView.extend({
-    moduleName: 'ShowView',
-    template: '#show_view',
+    moduleName: 'blogs/ShowView',
+    template: '#show_blog_view',
     ui: {
         edit: '#edit_blog',
         destroy: '#delete_blog',

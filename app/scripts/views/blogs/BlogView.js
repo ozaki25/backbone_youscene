@@ -2,7 +2,7 @@ var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
-    moduleName: 'BlogView',
+    moduleName: 'blogs/BlogView',
     tagName:  'div',
     template: '#blog_view',
     ui: {

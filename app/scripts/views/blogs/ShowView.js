@@ -3,8 +3,8 @@ var Framework = require('../../vendor/Framework');
 var LikeView = require('./LikeView');
 
 module.exports = Framework.LayoutView.extend({
-    moduleName: 'ShowView',
-    template: '#show_view',
+    moduleName: 'blogs/ShowView',
+    template: '#show_blog_view',
     ui: {
         edit: '#edit_blog',
         destroy: '#delete_blog',

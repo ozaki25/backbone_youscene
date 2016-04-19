@@ -80,7 +80,7 @@ a:focus {
   margin: 5px 0;
 }
 
-.index-title {
+.index-blog-title {
   font-size:150%;
 }
 
@@ -93,7 +93,7 @@ a:focus {
    margin-bottom: 10px;
 }
 
-.show-title {
+.show-blog-title {
   font-size:200%;
   color:#006633;
   font-weight: bold;
@@ -105,15 +105,11 @@ a:focus {
    margin-bottom: 0;
 }
 
-.show-article {
+.show-blog-article {
   background-color: #fffff0;
   border: none;
   border-radius: 0px;
   border-top:solid 1px;
   border-bottom:solid 1px;
-}
-
-.show-author {
-  margin-top:10px;
 }
 
