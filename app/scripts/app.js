@@ -146,8 +146,8 @@ module.exports = (function() {
                 var modId = this.id;
                 Framework.Logger.info('[APPLICATION_START]', {objName: name, objId: modId});
                 if(this.router) new this.router();
+                Backbone.history.start();
             });
-            Backbone.history.start();
             addLogCode(this, modName, this.id, Framework.reference.Application);
             Marionette.Application.apply(this, arguments);
         }
