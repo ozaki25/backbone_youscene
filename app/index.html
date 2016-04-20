@@ -124,17 +124,25 @@
       </script>
 
       <script id="comment_view" type="text/template">
-        <div class="alert alert-success">
-          <ul class="list-inline">
-            <li><%- author %></li>
-            <li><%- updated_at %></li>
-            <li class="pull-right">
-              <a href="#" class="edit-comment">編集</a>
-              <a href="#" class="delete-comment">削除</a>
-            </li>
-          </ul>
-          <pre class="show-comment-content"><%- content %></pre>
+        <div class="alert alert-success comment">
         </div>
+      </script>
+
+      <script id="show_comment_view" type="text/template">
+        <ul class="list-inline">
+          <li><%- author %></li>
+          <li><%- updated_at %></li>
+          <li class="pull-right">
+            <a href="#" class="edit-comment">編集</a>
+            <a href="#" class="delete-comment">削除</a>
+          </li>
+        </ul>
+        <pre class="show-comment-content"><%- content %></pre>
+      </script>
+
+      <script id="edit_comment_view" type="text/template">
+        <textarea class="form-control content" rows="3"><%- content %></textarea>
+        <button class="btn btn-youscene btn-xs update_comment">Update!</button>
       </script>
 
       <script id="new_comment_view" type="text/template">

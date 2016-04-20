@@ -351,7 +351,7 @@ module.exports = (function() {
     }
 })();
 
-},{"./Config":6,"./Logger":9,"backbone":"backbone","backbone.marionette":22,"jquery":"jquery","underscore":"underscore"}],8:[function(require,module,exports){
+},{"./Config":6,"./Logger":9,"backbone":"backbone","backbone.marionette":24,"jquery":"jquery","underscore":"underscore"}],8:[function(require,module,exports){
 var LoggerFormatter = {
     DEBUG_LEVEL: 3,
     INFO_LEVEL: 2,
@@ -693,11 +693,13 @@ module.exports = Framework.LayoutView.extend({
     }
 });
 
-},{"../../collections/Comments":2,"../../vendor/Framework":7,"../comments/IndexView":19,"../comments/NewView":20,"./LikeView":15,"backbone":"backbone"}],18:[function(require,module,exports){
+},{"../../collections/Comments":2,"../../vendor/Framework":7,"../comments/IndexView":20,"../comments/NewView":21,"./LikeView":15,"backbone":"backbone"}],18:[function(require,module,exports){
 var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
+var ShowView = require('./ShowView');
+var EditView = require('./EditView');
 
-module.exports = Framework.ItemView.extend({
+module.exports = Framework.LayoutView.extend({
     moduleName: 'comment/CommentView',
     tagName:  'div',
     template: '#comment_view',
@@ -705,12 +707,25 @@ module.exports = Framework.ItemView.extend({
         edit: '.edit-comment',
         destroy: '.delete-comment'
     },
+    regions: {
+        content: '.comment'
+    },
     events: {
         'click @ui.edit': 'edit',
         'click @ui.destroy': 'destroyComment'
     },
+    modelEvents: {
+        'change': 'show'
+    },
+    onRender: function() {
+        this.show();
+    },
+    show: function() {
+        this.getRegion('content').show(new ShowView({model: this.model}));
+    },
     edit: function(e) {
         e.preventDefault();
+        this.getRegion('content').show(new EditView({model: this.model}));
     },
     destroyComment: function(e) {
         e.preventDefault();
@@ -724,7 +739,28 @@ module.exports = Framework.ItemView.extend({
 });
 
 
-},{"../../vendor/Framework":7,"backbone":"backbone"}],19:[function(require,module,exports){
+},{"../../vendor/Framework":7,"./EditView":19,"./ShowView":22,"backbone":"backbone"}],19:[function(require,module,exports){
+var $ = require('jquery');
+var Framework = require('../../vendor/Framework');
+
+module.exports = Framework.ItemView.extend({
+    moduleName: 'comments/EditView',
+    template: '#edit_comment_view',
+    ui: {
+        content: 'textarea.content',
+        update: '.update_comment'
+    },
+    events: {
+        'click @ui.update': 'update'
+    },
+    update: function() {
+        this.model.save({
+            content: this.ui.content.val()
+        });
+    }
+});
+
+},{"../../vendor/Framework":7,"jquery":"jquery"}],20:[function(require,module,exports){
 var Framework = require('../../vendor/Framework');
 var CommentView = require('./CommentView');
 
@@ -734,7 +770,7 @@ module.exports = Framework.CollectionView.extend({
     childViewContainer: '#comment_list'
 });
 
-},{"../../vendor/Framework":7,"./CommentView":18}],20:[function(require,module,exports){
+},{"../../vendor/Framework":7,"./CommentView":18}],21:[function(require,module,exports){
 var Framework = require('../../vendor/Framework');
 
 module.exports = Framework.ItemView.extend({
@@ -754,7 +790,15 @@ module.exports = Framework.ItemView.extend({
     }
 });
 
-},{"../../vendor/Framework":7}],21:[function(require,module,exports){
+},{"../../vendor/Framework":7}],22:[function(require,module,exports){
+var Framework = require('../../vendor/Framework');
+
+module.exports = Framework.ItemView.extend({
+    moduleName: 'comments/ShowView',
+    template: '#show_comment_view'
+});
+
+},{"../../vendor/Framework":7}],23:[function(require,module,exports){
 // Backbone.BabySitter
 // -------------------
 // v0.1.11
@@ -946,7 +990,7 @@ module.exports = Framework.ItemView.extend({
 
 }));
 
-},{"backbone":"backbone","underscore":"underscore"}],22:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],24:[function(require,module,exports){
 // MarionetteJS (Backbone.Marionette)
 // ----------------------------------
 // v2.4.5
@@ -4457,7 +4501,7 @@ module.exports = Framework.ItemView.extend({
   return Marionette;
 }));
 
-},{"backbone":"backbone","backbone.babysitter":21,"backbone.wreqr":23,"underscore":"underscore"}],23:[function(require,module,exports){
+},{"backbone":"backbone","backbone.babysitter":23,"backbone.wreqr":25,"underscore":"underscore"}],25:[function(require,module,exports){
 // Backbone.Wreqr (Backbone.Marionette)
 // ----------------------------------
 // v1.3.6
