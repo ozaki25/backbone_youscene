@@ -9,14 +9,16 @@ module.exports = Framework.LayoutView.extend({
     template: '#comment_view',
     ui: {
         edit: '.edit-comment',
-        destroy: '.delete-comment'
+        destroy: '.delete-comment',
+        cancelEdit: '.cancel-edit-comment'
     },
     regions: {
         content: '.comment'
     },
     events: {
         'click @ui.edit': 'edit',
-        'click @ui.destroy': 'destroyComment'
+        'click @ui.destroy': 'destroyComment',
+        'click @ui.cancelEdit': 'cancelEdit'
     },
     modelEvents: {
         'change': 'show'
@@ -30,6 +32,10 @@ module.exports = Framework.LayoutView.extend({
     edit: function(e) {
         e.preventDefault();
         this.getRegion('content').show(new EditView({model: this.model}));
+    },
+    cancelEdit: function(e) {
+        e.preventDefault();
+        this.show();
     },
     destroyComment: function(e) {
         e.preventDefault();
