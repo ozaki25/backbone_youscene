@@ -1,39 +1,41 @@
 class CommentsController < ApplicationController
+  before_action :set_blog
   before_action :set_comment, only: %i(show update destroy)
 
-  # GET /comments.json
+  # GET /blogs/1/comments.json
   def index
-    @comments = Comment.all
+    @comments = @blog.comments
   end
 
-  # GET /comments/1.json
+  # GET /blogs/1/comments/1.json
   def show
+    puts "aaaaaaaa"
   end
 
-  # POST /comments.json
+  # POST /blogs/1/comments.json
   def create
-    @comment = Comment.new(comment_params)
+    @comment = @blog.comments.new(comment_params)
     respond_to do |format|
       if @comment.save
-        format.json { render :show, status: :created, location: @comment }
+        format.json { render :show }
       else
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        format.json { render json: @comment.errors }
       end
     end
   end
 
-  # PATCH/PUT /comments/1.json
+  # PATCH/PUT /blogs/1/comments/1.json
   def update
     respond_to do |format|
       if @comment.update(comment_params)
-        format.json { render :show, status: :ok, location: @comment }
+        format.json { render :show }
       else
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        format.json { render json: @comment.errors }
       end
     end
   end
 
-  # DELETE /comments/1.json
+  # DELETE /blogs/1/comments/1.json
   def destroy
     @comment.destroy
     respond_to do |format|
@@ -42,12 +44,14 @@ class CommentsController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
+  def set_blog
+    @blog = Blog.find(params[:blog_id])
+  end
+
   def set_comment
     @comment = Comment.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def comment_params
     params.require(:comment).permit(:author, :content, :blog_id)
   end
