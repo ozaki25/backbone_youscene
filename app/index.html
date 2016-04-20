@@ -125,12 +125,13 @@
 
       <script id="comment_view" type="text/template">
         <div class="alert alert-success">
-          <button type="button" class="close">
-            <span aria-hidden="true">&times;</span>
-          </button>
           <ul class="list-inline">
             <li><%- author %></li>
             <li><%- updated_at %></li>
+            <li class="pull-right">
+              <a href="#" class="edit-comment">編集</a>
+              <a href="#" class="delete-comment">削除</a>
+            </li>
           </ul>
           <pre class="show-comment-content"><%- content %></pre>
         </div>

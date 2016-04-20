@@ -6,12 +6,18 @@ module.exports = Framework.ItemView.extend({
     tagName:  'div',
     template: '#comment_view',
     ui: {
-        destroy: '.close'
+        edit: '.edit-comment',
+        destroy: '.delete-comment'
     },
     events: {
+        'click @ui.edit': 'edit',
         'click @ui.destroy': 'destroyComment'
     },
-    destroyComment: function() {
+    edit: function(e) {
+        e.preventDefault();
+    },
+    destroyComment: function(e) {
+        e.preventDefault();
         var isDestroy = confirm('削除してよろしいですか。');
         if(isDestroy) {
             this.model.destroy()
