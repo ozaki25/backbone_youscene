@@ -125,12 +125,15 @@
 
       <script id="comment_view" type="text/template">
         <div class="alert alert-success">
-            <ul class="list-inline">
-              <li><%- author %></li>
-              <li><%- updated_at %></li>
-            </ul>
-            <pre class="show-comment-content"><%- content %></pre>
-          </div>
+          <button type="button" class="close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <ul class="list-inline">
+            <li><%- author %></li>
+            <li><%- updated_at %></li>
+          </ul>
+          <pre class="show-comment-content"><%- content %></pre>
+        </div>
       </script>
 
       <script id="new_comment_view" type="text/template">
