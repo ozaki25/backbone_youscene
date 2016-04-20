@@ -2,7 +2,8 @@ var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 var Comments = require('../../collections/Comments');
 var LikeView = require('./LikeView');
-var CommentIndexView = require('../comments/IndexView');
+var IndexCommentView = require('../comments/IndexView');
+var NewCommentView = require('../comments/NewView');
 
 
 module.exports = Framework.LayoutView.extend({
@@ -14,7 +15,8 @@ module.exports = Framework.LayoutView.extend({
         like: '#like_btn'
     },
     regions: {
-        comment: '#comment_list',
+        comments: '#comment_list',
+        newComment: '#new_comment',
         like: '#like_count'
     },
     events: {
@@ -23,7 +25,10 @@ module.exports = Framework.LayoutView.extend({
         'click @ui.like': 'addLike'
     },
     onRender: function() {
-        this.getRegion('comment').show(new CommentIndexView({collection: new Comments(this.model.get('comments'))}));
+        var comments = new Comments(this.model.get('comments'));
+        comments.url = this.model.url() + '/comments';
+        this.getRegion('comments').show(new IndexCommentView({collection: comments}));
+        this.getRegion('newComment').show(new NewCommentView({collection: comments}));
         this.getRegion('like').show(new LikeView({model: this.model}))
     },
     edit: function() {

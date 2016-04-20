@@ -112,7 +112,10 @@
               <button id="delete_blog" class="btn btn-sm btn-default form-control">Destroy</button>
             </div>
           </div>
-          <div id="comment_list" class="index-comment"></div>
+          <div class="comments">
+            <div id="comment_list"></div>
+            <div id="new_comment"></div>
+          </div>
       </script>
 
       <script id="like_view" type="text/template">
@@ -128,6 +131,13 @@
             </ul>
             <pre class="show-comment-content"><%- content %></pre>
           </div>
+      </script>
+
+      <script id="new_comment_view" type="text/template">
+        <div class="form-group">
+          <textarea id="content" class="form-control" rows="3"></textarea>
+        </div>
+        <button id="create_comment" class="btn btn-youscene btn-xs">Comment!</button>
       </script>
 
       <script src="./scripts/app.js" type="text/javascript"></script>

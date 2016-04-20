@@ -2,5 +2,9 @@ var Framework = require('../vendor/Framework');
 
 module.exports = Framework.Model.extend({
     moduleName: 'CommentModel',
-    urlRoot: 'http://localhost:3001/comments'
+    defaults: function() {
+        return {
+            author: '名無しさん'
+        };
+    }
 });

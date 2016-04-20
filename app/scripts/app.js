@@ -14,8 +14,7 @@ var Comment = require('../models/Comment');
 
 module.exports = Framework.Collection.extend({
     moduleName: 'CommentCollection',
-    model: Comment,
-    url: 'http://localhost:3001/comments'
+    model: Comment
 });
 
 },{"../models/Comment":5,"../vendor/Framework":7}],3:[function(require,module,exports){
@@ -99,7 +98,11 @@ var Framework = require('../vendor/Framework');
 
 module.exports = Framework.Model.extend({
     moduleName: 'CommentModel',
-    urlRoot: 'http://localhost:3001/comments'
+    defaults: function() {
+        return {
+            author: '名無しさん'
+        };
+    }
 });
 
 },{"../vendor/Framework":7}],6:[function(require,module,exports){
@@ -348,7 +351,7 @@ module.exports = (function() {
     }
 })();
 
-},{"./Config":6,"./Logger":9,"backbone":"backbone","backbone.marionette":21,"jquery":"jquery","underscore":"underscore"}],8:[function(require,module,exports){
+},{"./Config":6,"./Logger":9,"backbone":"backbone","backbone.marionette":22,"jquery":"jquery","underscore":"underscore"}],8:[function(require,module,exports){
 var LoggerFormatter = {
     DEBUG_LEVEL: 3,
     INFO_LEVEL: 2,
@@ -643,7 +646,8 @@ var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 var Comments = require('../../collections/Comments');
 var LikeView = require('./LikeView');
-var CommentIndexView = require('../comments/IndexView');
+var IndexCommentView = require('../comments/IndexView');
+var NewCommentView = require('../comments/NewView');
 
 
 module.exports = Framework.LayoutView.extend({
@@ -655,7 +659,8 @@ module.exports = Framework.LayoutView.extend({
         like: '#like_btn'
     },
     regions: {
-        comment: '#comment_list',
+        comments: '#comment_list',
+        newComment: '#new_comment',
         like: '#like_count'
     },
     events: {
@@ -664,7 +669,10 @@ module.exports = Framework.LayoutView.extend({
         'click @ui.like': 'addLike'
     },
     onRender: function() {
-        this.getRegion('comment').show(new CommentIndexView({collection: new Comments(this.model.get('comments'))}));
+        var comments = new Comments(this.model.get('comments'));
+        comments.url = this.model.url() + '/comments';
+        this.getRegion('comments').show(new IndexCommentView({collection: comments}));
+        this.getRegion('newComment').show(new NewCommentView({collection: comments}));
         this.getRegion('like').show(new LikeView({model: this.model}))
     },
     edit: function() {
@@ -685,7 +693,7 @@ module.exports = Framework.LayoutView.extend({
     }
 });
 
-},{"../../collections/Comments":2,"../../vendor/Framework":7,"../comments/IndexView":19,"./LikeView":15,"backbone":"backbone"}],18:[function(require,module,exports){
+},{"../../collections/Comments":2,"../../vendor/Framework":7,"../comments/IndexView":19,"../comments/NewView":20,"./LikeView":15,"backbone":"backbone"}],18:[function(require,module,exports){
 var Backbone = require('backbone');
 var Framework = require('../../vendor/Framework');
 
@@ -707,6 +715,26 @@ module.exports = Framework.CollectionView.extend({
 });
 
 },{"../../vendor/Framework":7,"./CommentView":18}],20:[function(require,module,exports){
+var Framework = require('../../vendor/Framework');
+
+module.exports = Framework.ItemView.extend({
+    moduleName: 'comments/NewView',
+    template: '#new_comment_view',
+    ui: {
+        content: 'textarea#content'
+    },
+    events: {
+        'click #create_comment': 'create'
+    },
+    create: function() {
+        this.collection.create({
+            content: this.ui.content.val().trim()
+        }, {wait : true});
+        this.ui.content.val('');
+    }
+});
+
+},{"../../vendor/Framework":7}],21:[function(require,module,exports){
 // Backbone.BabySitter
 // -------------------
 // v0.1.11
@@ -898,7 +926,7 @@ module.exports = Framework.CollectionView.extend({
 
 }));
 
-},{"backbone":"backbone","underscore":"underscore"}],21:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],22:[function(require,module,exports){
 // MarionetteJS (Backbone.Marionette)
 // ----------------------------------
 // v2.4.5
@@ -4409,7 +4437,7 @@ module.exports = Framework.CollectionView.extend({
   return Marionette;
 }));
 
-},{"backbone":"backbone","backbone.babysitter":20,"backbone.wreqr":22,"underscore":"underscore"}],22:[function(require,module,exports){
+},{"backbone":"backbone","backbone.babysitter":21,"backbone.wreqr":23,"underscore":"underscore"}],23:[function(require,module,exports){
 // Backbone.Wreqr (Backbone.Marionette)
 // ----------------------------------
 // v1.3.6
